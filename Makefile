@@ -1,5 +1,5 @@
 #
-# ODAS Generic App
+# ODAS QuestKalender App
 # (C) Ondics, 2026
 #
 
@@ -23,7 +23,7 @@ DATE := $(shell date '+%Y%m%d')
 .PHONY: help build stats
 
 help:
-	@echo "# ODAS Generic App"
+	@echo "# ODAS QuestKalender App"
 	@echo "# Ondics, 2026"
 	@echo "# dir = ${current_dir}"
 	@echo Befehle: make ...
