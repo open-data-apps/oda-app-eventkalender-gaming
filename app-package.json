@@ -1,0 +1,223 @@
+{
+  "app-entwickler-id": "12343",
+  "app-entwickler-name": "ondics-gmbh",
+  "name-in-url": "questkalender",
+  "name": "QuestKalender",
+  "version": "1.0.1",
+  "odas-app-icon": "assets/odas-app-icon.svg",
+  "app-icon": "assets/odas-app-icon.svg",
+  "kurzbeschreibung": "Der ultimative Event-Hub für Gamer. Finde LAN-Partys, Esports-Turniere, Cosplay-Treffen und Tabletop-Quests in deiner Nähe mit XP-Statistiken, Live-Map und iCal-Export.",
+  "beschreibung": [
+    "_multiline_",
+    "Der QuestKalender bringt städtische und regionale Gaming-Events direkt auf dein Dashboard.",
+    "Finde aktive Quests (Events) im Quest Log, plane deine Strategie mit der Tactical Map, checke Mitspieler in der Co-Op Lobby und verfolge Statistiken im Leaderboard.",
+    "Einzelne oder alle Quests können als iCal (.ics) direkt in deinen persönlichen Kalender exportiert werden."
+  ],
+  "tags-funktion": ["Quest-Log", "Tactical-Map", "Leaderboard", "Gaming-Hub"],
+  "tags-dateityp": ["CSV", "JSON", "ICS"],
+  "tags-datenart": ["Gaming", "Esports", "LAN-Party", "Tabletop"],
+  "screenshots": [
+    "assets/Desktop_Screenshot.png",
+    "assets/Mobile_Screenshot.png"
+  ],
+  "daten": {
+    "beschreibung": "Die App verarbeitet Quest- und Veranstaltungskalender-Daten. Jedes Event muss mindestens ein Startdatum, einen Titel und eine ID besitzen. Optionale Felder umfassen Ortsangaben mit Geokoordinaten, Teilnehmer, Kategorien und Wiederholungsregeln.",
+    "schema": "assets/schema.json",
+    "beispiel": "assets/events-mock.json",
+    "beispiel-url": "https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f/resource/630c8c4b-a530-4880-becf-ac0b84ea922b/download/events.csv"
+  },
+  "branding-css": "assets/branding.css",
+  "api-version": "1",
+  "instanz-config": {
+    "seitentitel": {
+      "label": "Seitentitel",
+      "hilfe": "Der Seitentitel wird im Browser-Tab der App angezeigt",
+      "default": "QuestKalender - Gamer Event Hub",
+      "format": {
+        "typ": "string",
+        "laenge": 50
+      },
+      "erforderlich": "ja"
+    },
+    "lizenz": {
+      "label": "Lizenz",
+      "hilfe": "Angabe der Lizenz, die für die Nutzung der App gilt.",
+      "default": "Open Software License (OSL)",
+      "format": {
+        "typ": "string",
+        "laenge": 50
+      },
+      "erforderlich": "ja"
+    },
+    "titel": {
+      "label": "Titel",
+      "hilfe": "Der Titel wird in der Titelzeile der App angezeigt",
+      "default": "QuestKalender - Finde deine Gaming-Quests",
+      "format": {
+        "typ": "string",
+        "laenge": 50
+      },
+      "erforderlich": "ja"
+    },
+    "icon": {
+      "label": "App-Icon",
+      "hilfe": "Das Icon wird links oben in der Titelzeile angezeigt",
+      "default": "logo_ondics.png",
+      "format": {
+        "typ": "image",
+        "hoehe": 100,
+        "breite": 300
+      },
+      "erforderlich": "ja"
+    },
+    "kontakt": {
+      "label": "Kontakt",
+      "hilfe": "Der Text wird im Menüpunkt 'Kontakt' anzeigt",
+      "format": {
+        "typ": "markdown"
+      },
+      "default": [
+        "_multiline_",
+        "Du hast Fragen, Feedback oder möchtest ein neues Gaming-Event (Quest) eintragen lassen?",
+        "Melde dich direkt bei uns:",
+        "Tel.: <a href='tel:+49711310093100'>0711-31009-3100</a>",
+        "E-Mail: <a href='mailto:esports@esslingen.de'>esports@esslingen.de</a>"
+      ],
+      "erforderlich": "ja"
+    },
+    "beschreibung": {
+      "label": "Beschreibung",
+      "hilfe": "Der Text wird im Menüpunkt 'Über diese App' angezeigt",
+      "format": {
+        "typ": "markdown"
+      },
+      "default": [
+        "_multiline_",
+        "Der QuestKalender visualisiert städtische und regionale Gaming-Events.",
+        "## Datenquelle",
+        "Die Daten kommen aus dem Open Data Portal und werden regelmäßig aktualisiert.",
+        "## Über diese App",
+        "Entwickelt von der Ondics GmbH für den Open Data App Store."
+      ],
+      "erforderlich": "ja"
+    },
+    "impressum": {
+      "label": "Impressum",
+      "hilfe": "Der Text wird im Menüpunkt 'Impressum' anzeigt",
+      "format": {
+        "typ": "markdown"
+      },
+      "default": [
+        "_multiline_",
+        "### Herausgeber",
+        "Stadt Esslingen am Neckar",
+        "Rathausplatz 1",
+        "73728 Esslingen",
+        "### App-Entwicklung",
+        "Ondics GmbH<br>Blumenstraße 19<br>73728 Esslingen"
+      ],
+      "erforderlich": "ja"
+    },
+    "datenschutz": {
+      "label": "Datenschutz",
+      "hilfe": "Der Text wird im Menüpunkt 'Datenschutz' anzeigt",
+      "format": {
+        "typ": "markdown"
+      },
+      "default": [
+        "_multiline_",
+        "Diese Anwendung speichert keine personenbezogenen Daten.",
+        "Alle Abfragen erfolgen anonym über den Server."
+      ],
+      "erforderlich": "ja"
+    },
+    "fusszeile": {
+      "label": "Fußzeile",
+      "hilfe": "Wird auf der Website unten in der Fusszeile angezeigt.",
+      "format": {
+        "typ": "string",
+        "laenge": 100
+      },
+      "default": "(C) Copyright 2026 | QuestKalender | App-Entwickler: Ondics GmbH",
+      "erforderlich": "ja"
+    },
+    "apiurl": {
+      "label": "URL zu den Daten",
+      "hilfe": "Basis-URL des CKAN-Endpunkts (z. B. datastore_search)",
+      "format": {
+        "typ": "url",
+        "laenge": 255
+      },
+      "default": "https://open-data-musterstadt.ckan.de/api/3/action/datastore_search",
+      "beispiel": "https://open-data-musterstadt.ckan.de/api/3/action/datastore_search",
+      "erforderlich": "ja"
+    },
+    "resourceId": {
+      "label": "Ressourcen-ID",
+      "hilfe": "CKAN Ressourcen-ID des Datensatzes",
+      "format": {
+        "typ": "string",
+        "laenge": 100
+      },
+      "default": "36aa580e-0c46-4f76-bc95-fbba9a5c5fa3",
+      "beispiel": "36aa580e-0c46-4f76-bc95-fbba9a5c5fa3",
+      "erforderlich": "ja"
+    },
+    "maxRecords": {
+      "label": "Maximaler Datensätze",
+      "hilfe": "Maximale Anzahl an Einträgen, die geladen werden (z.B. 1000)",
+      "format": {
+        "typ": "string"
+      },
+      "default": "1000",
+      "erforderlich": "nein"
+    },
+    "standardKategorie": {
+      "label": "Standard-Kategorie",
+      "hilfe": "Standardmäßig ausgewählte Kategorie beim Start",
+      "format": {
+        "typ": "string"
+      },
+      "default": "alle",
+      "erforderlich": "nein"
+    },
+    "karteZentrum": {
+      "label": "Karten-Zentrum",
+      "hilfe": "Initiale Geokoordinaten der Karte (Latitude, Longitude)",
+      "format": {
+        "typ": "string"
+      },
+      "default": "48.7396, 9.3097",
+      "erforderlich": "nein"
+    },
+    "karteZoom": {
+      "label": "Karten-Zoom",
+      "hilfe": "Initiales Zoom-Level der Karte (z.B. 12)",
+      "format": {
+        "typ": "string"
+      },
+      "default": "12",
+      "erforderlich": "nein"
+    },
+    "proxyAktiv": {
+      "label": "ODAS Proxy aktivieren",
+      "hilfe": "Soll die Datenabfrage über den integrierten ODAS CORS-Proxy laufen?",
+      "format": {
+        "typ": "dropdown",
+        "optionen": ["nein", "ja"],
+        "default": "nein"
+      },
+      "erforderlich": "ja"
+    },
+    "sprache": {
+      "label": "Sprache der App",
+      "hilfe": "Angabe der App-Sprache",
+      "format": {
+        "typ": "dropdown",
+        "optionen": ["de"],
+        "default": "de"
+      },
+      "erforderlich": "ja"
+    }
+  }
+}

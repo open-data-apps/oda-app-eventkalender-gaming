@@ -1,0 +1,38 @@
+{
+  "apiVersion": "1",
+  "titel": "QuestKalender",
+  "seitentitel": "QuestKalender - Cyberpunk Gaming Dashboard",
+  "icon": "logo_ondics.png",
+  "brandingCSS": "",
+  "brandingCSSFile": "./assets/branding.css",
+  "beschreibung": [
+    "QuestKalender - The ultimate gaming event and tournament campaign tracker. Select a quest in your Quest Log, unlock random campaigns, coordinate with co-op players, and trace locations on the Tactical Map."
+  ],
+  "kontakt": [
+    "Tel.: <a href='tel:+49711310093100'>0711-31009-3100</a><br>",
+    "Fax: <a href='tel:+49711310093108'>0711-31009-3108</a><br>",
+    "E-Mail: <a href='mailto:info@ondics.de'>info@ondics.de</a>"
+  ],
+  "impressum": [
+    "Ondics GmbH<br>",
+    "Wolfgang Clauss<br>Blumenstrasse 19<br>",
+    "<a href='https://www.ondics.de/' target='_blank'>https://www.ondics.de/</a>"
+  ],
+  "datenschutz": "Datenschutzerklärung für die QuestKalender ODAS App...",
+  "urlODP": "https://open-data-esslingen.de",
+  "urlDaten": "https://open-data-esslingen.de/dataset/questkalender",
+  "fusszeile": [
+    "(C) Copyright 2026 | ",
+    "Quest Board Platform | ",
+    "App-Entwickler: Ondics GmbH | ",
+    "Provided by: ODAS Platform"
+  ],
+  "apiurl": "https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f/resource/630c8c4b-a530-4880-becf-ac0b84ea922b/download/events.csv",
+  "resourceId": "630c8c4b-a530-4880-becf-ac0b84ea922b",
+  "maxRecords": "1000",
+  "standardKategorie": "alle",
+  "karteZentrum": "48.7396, 9.3097",
+  "karteZoom": "12",
+  "proxyAktiv": "ja",
+  "sprache": "de"
+}
