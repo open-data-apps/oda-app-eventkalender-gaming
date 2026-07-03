@@ -44,3 +44,6 @@ Der Inhaltsbereich wird in `app.js` erstellt. Dort ist die gesamte Visualisierun
 
 ## Autor
 © 2026, Ondics GmbH
+
+## Für wen ist diese App?
+Diese App präsentiert Veranstaltungen im Gaming-Stil. Sie richtet sich an Gaming-affine Event-Entdecker:innen, die lokale Events auf spielerische Weise erkunden möchten.

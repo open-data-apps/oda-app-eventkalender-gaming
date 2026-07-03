@@ -3,7 +3,7 @@
   "app-entwickler-name": "ondics-gmbh",
   "name-in-url": "questkalender",
   "name": "QuestKalender (z.B. für Gaming-Events)",
-  "version": "1.0.2",
+  "version": "1.3.0",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/odas-app-icon.svg",
   "kurzbeschreibung": "Der ultimative Event-Hub für Gamer. Finde LAN-Partys, Esports-Turniere, Cosplay-Treffen und Tabletop-Quests in deiner Nähe mit XP-Statistiken, Live-Map und iCal-Export.",
@@ -11,7 +11,10 @@
     "_multiline_",
     "Der QuestKalender bringt städtische und regionale Gaming-Events direkt auf dein Dashboard.",
     "Finde aktive Quests (Events) im Quest Log, plane deine Strategie mit der Tactical Map, checke Mitspieler in der Co-Op Lobby und verfolge Statistiken im Leaderboard.",
-    "Einzelne oder alle Quests können als iCal (.ics) direkt in deinen persönlichen Kalender exportiert werden."
+    "Einzelne oder alle Quests können als iCal (.ics) direkt in deinen persönlichen Kalender exportiert werden.",
+    "",
+    "### Für wen ist diese App?",
+    "Diese App präsentiert Veranstaltungen im Gaming-Stil. Sie richtet sich an Gaming-affine Event-Entdecker:innen, die lokale Events auf spielerische Weise erkunden möchten."
   ],
   "tags-funktion": ["Quest-Log", "Tactical-Map", "Leaderboard", "Gaming-Hub"],
   "tags-dateityp": ["CSV", "JSON", "ICS"],
@@ -208,6 +211,28 @@
         "default": "nein"
       },
       "erforderlich": "ja"
+    },
+    "datenStand": {
+      "label": "Datenstand",
+      "hilfe": "Zeitstempel der letzten Datenaktualisierung (manuell)",
+      "format": {
+        "typ": "string",
+        "laenge": 50
+      },
+      "default": "",
+      "erforderlich": "nein"
+    },
+    "weiterfuehrendeLinks": {
+      "label": "Weiterführende Links",
+      "hilfe": "Markdown-Text mit weiterführenden Links zur Datenquelle",
+      "format": {
+        "typ": "markdown"
+      },
+      "default": [
+        "_multiline_",
+        "[Datenquelle auf CKAN](https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f)"
+      ],
+      "erforderlich": "nein"
     },
     "sprache": {
       "label": "Sprache der App",

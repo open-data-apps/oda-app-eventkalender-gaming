@@ -757,3 +757,25 @@ footer p,
   background-color: rgba(0, 240, 255, 0.08) !important;
   text-shadow: 0 0 8px rgba(0, 240, 255, 0.4) !important;
 }
+
+/* Schale 4: Weiterführende Links */
+.qk-weitere-infos {
+  background: rgba(30, 30, 40, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+.qk-weitere-infos-content :last-child { margin-bottom: 0; }
+.qk-weitere-infos-content a { color: var(--bs-info); overflow-wrap: anywhere; }
+
+.qk-methodik { border: 1px solid var(--bs-border-color); border-radius: 0.5rem; background: var(--bs-body-bg); overflow: hidden; }
+.qk-methodik-toggle { width: 100%; border: 0; background: transparent; color: inherit; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem; text-align: left; }
+.qk-methodik-toggle:hover, .qk-methodik-toggle:focus-visible { background: rgba(var(--bs-primary-rgb), 0.05); outline: none; }
+.qk-methodik-chevron { transition: transform 0.18s ease; }
+.qk-methodik-toggle[aria-expanded="true"] .qk-methodik-chevron { transform: rotate(180deg); }
+.qk-methodik-content { border-top: 1px solid var(--bs-border-color); padding: 1rem; }
+.qk-methodik-content p:last-child { margin-bottom: 0; }
+.qk-kpi-info-toggle { border: 0; background: transparent; color: var(--bs-secondary-color); width: 1.75rem; height: 1.75rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 0; }
+.qk-kpi-info-toggle:hover, .qk-kpi-info-toggle:focus-visible, .qk-kpi-info-toggle:not(.collapsed) { color: var(--bs-primary); background: rgba(var(--bs-primary-rgb), 0.08); outline: none; }
+.qk-kpi-info-icon { font-size: 1rem; line-height: 1; }
+.qk-kpi-kontext { margin-top: 0.5rem; color: var(--bs-secondary-color); font-size: 0.875rem; line-height: 1.4; }

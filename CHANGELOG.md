@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0 (2026-07-03)
+
+- **Schale 4 – Phase 1:** Für-wen-Block, Weiterführende Links, Datenfrische (manueller datenStand)
+
 ## ToDo
 
 - Config über Nginx laden

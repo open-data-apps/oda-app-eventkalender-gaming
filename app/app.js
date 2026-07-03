@@ -177,6 +177,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
   function renderSkeleton() {
     enclosingHtmlDivElement.innerHTML = `
       <div class="event-container" id="${rootId}">
+        <div class="text-end mb-2"><small id="qk-datenstand" class="text-muted">${configdata.datenStand ? escapeHtml(configdata.datenStand) : ''}</small></div>
         
         <!-- Header Actions -->
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2 event-header">
@@ -280,6 +281,9 @@ function app(configdata = {}, enclosingHtmlDivElement) {
           </div>
 
         </div>
+
+        ${renderWeitereInfos(configdata)}
+        ${renderMethodikbox(configdata)}
 
       </div>
     `;
@@ -857,26 +861,31 @@ function app(configdata = {}, enclosingHtmlDivElement) {
         <div class="kpi-label">Daily Quests</div>
         <div class="kpi-value" title="${eventsToday.length}">${eventsToday.length}</div>
         <div class="kpi-sub">Active campaigns today</div>
+        ${kpiContext(configdata.kpiKontext1, "1")}
       </div>
       <div class="kpi-card kpi-next">
         <div class="kpi-label">Active Quest</div>
         <div class="kpi-value" title="${escapeHtml(nextEventTitle)}">${escapeHtml(nextEventTitle)}</div>
         <div class="kpi-sub">${escapeHtml(countdownStr)}</div>
+        ${kpiContext(configdata.kpiKontext2, "2")}
       </div>
       <div class="kpi-card kpi-woche">
         <div class="kpi-label">Weekly Quests</div>
         <div class="kpi-value" title="${eventsThisWeek.length}">${eventsThisWeek.length}</div>
         <div class="kpi-sub">Campaigns in 7 days</div>
+        ${kpiContext(configdata.kpiKontext3, "3")}
       </div>
       <div class="kpi-card kpi-kat">
         <div class="kpi-label">Quest Types</div>
         <div class="kpi-value" title="${uniqueKats}">${uniqueKats}</div>
         <div class="kpi-sub">Campaign categories</div>
+        ${kpiContext(configdata.kpiKontext4, "4")}
       </div>
       <div class="kpi-card kpi-org">
         <div class="kpi-label">Guilds</div>
         <div class="kpi-value" title="${uniqueOrgs}">${uniqueOrgs}</div>
         <div class="kpi-sub">Factions registered</div>
+        ${kpiContext(configdata.kpiKontext5, "5")}
       </div>
     `;
   }
@@ -1796,6 +1805,110 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     script.async = true;
     script.onload = callback;
     document.head.appendChild(script);
+  }
+
+
+  /* ── Schale 4: KPI Kontext ── */
+  function kpiContext(kontext, id) {
+    var text = String(kontext || "").trim();
+    if (!text) return "";
+    var targetId = "qk-kpi-kontext-" + id;
+    return (
+      '<button class="qk-kpi-info-toggle collapsed" type="button" ' +
+      'data-bs-toggle="collapse" data-bs-target="#' + targetId + '" ' +
+      'aria-expanded="false" aria-controls="' + targetId + '" ' +
+      'aria-label="Erklärung zu diesem Wert">' +
+      '<span class="qk-kpi-info-icon" aria-hidden="true">ⓘ</span>' +
+      "</button>" +
+      '<div id="' + targetId + '" class="collapse">' +
+      '<div class="qk-kpi-kontext">' + escapeHtml(text) + "</div>" +
+      "</div>"
+    );
+  }
+
+  /* ── Schale 4: Methodikbox ── */
+  function renderMethodikbox(cfg) {
+    var hinweis = ((cfg && cfg.datenquelleHinweis) || "").trim();
+    var stand = ((cfg && cfg.datenStand) || "").trim();
+    if (!hinweis && !stand) return "";
+    var standHtml = stand
+      ? '<p class="text-muted small mb-2">' + escapeHtml(stand) + "</p>"
+      : "";
+    return (
+      '<section class="qk-methodik mt-3">' +
+      '<button class="qk-methodik-toggle collapsed" type="button" ' +
+      'data-bs-toggle="collapse" data-bs-target="#qk-methodik-body" ' +
+      'aria-expanded="false" aria-controls="qk-methodik-body">' +
+      '<h2 class="h5 mb-0">Methodik &amp; Datenquelle</h2>' +
+      '<span class="qk-methodik-chevron" aria-hidden="true">&#9662;</span>' +
+      "</button>" +
+      '<div id="qk-methodik-body" class="collapse">' +
+      '<div class="qk-methodik-content">' +
+      standHtml +
+      hinweis +
+      "</div></div></section>"
+    );
+  }
+
+
+  /* ── Schale 4: KPI Kontext ── */
+  function kpiContext(kontext, id) {
+    var text = String(kontext || "").trim();
+    if (!text) return "";
+    var targetId = "qk-kpi-kontext-" + id;
+    return (
+      '<button class="qk-kpi-info-toggle collapsed" type="button" ' +
+      'data-bs-toggle="collapse" data-bs-target="#' + targetId + '" ' +
+      'aria-expanded="false" aria-controls="' + targetId + '" ' +
+      'aria-label="Erklärung zu diesem Wert">' +
+      '<span class="qk-kpi-info-icon" aria-hidden="true">ⓘ</span>' +
+      "</button>" +
+      '<div id="' + targetId + '" class="collapse">' +
+      '<div class="qk-kpi-kontext">' + escapeHtml(text) + "</div>" +
+      "</div>"
+    );
+  }
+
+  /* ── Schale 4: Methodikbox ── */
+  function renderMethodikbox(cfg) {
+    var hinweis = ((cfg && cfg.datenquelleHinweis) || "").trim();
+    var stand = ((cfg && cfg.datenStand) || "").trim();
+    if (!hinweis && !stand) return "";
+    var standHtml = stand
+      ? '<p class="text-muted small mb-2">' + escapeHtml(stand) + "</p>"
+      : "";
+    return (
+      '<section class="qk-methodik mt-3">' +
+      '<button class="qk-methodik-toggle collapsed" type="button" ' +
+      'data-bs-toggle="collapse" data-bs-target="#qk-methodik-body" ' +
+      'aria-expanded="false" aria-controls="qk-methodik-body">' +
+      '<h2 class="h5 mb-0">Methodik &amp; Datenquelle</h2>' +
+      '<span class="qk-methodik-chevron" aria-hidden="true">&#9662;</span>' +
+      "</button>" +
+      '<div id="qk-methodik-body" class="collapse">' +
+      '<div class="qk-methodik-content">' +
+      standHtml +
+      hinweis +
+      "</div></div></section>"
+    );
+  }
+
+  /* ── Schale 4: Weiterführende Links ── */
+  function renderWeitereInfos(cfg) {
+    var links = cfg && cfg.weiterfuehrendeLinks;
+    if (!links) return "";
+    if (Array.isArray(links)) {
+      links = links.filter(function(l) { return l !== "_multiline_"; }).join("\n");
+    }
+    links = String(links).trim();
+    if (!links) return "";
+    return (
+      '<section class="qk-weitere-infos mt-3">' +
+      '<h2 class="h5 mb-2">Weitere Informationen</h2>' +
+      '<div class="qk-weitere-infos-content">' +
+      links +
+      "</div></section>"
+    );
   }
 
   return null;
