@@ -1869,30 +1869,6 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     );
   }
 
-  /* ── Schale 4: Methodikbox ── */
-  function renderMethodikbox(cfg) {
-    var hinweis = ((cfg && cfg.datenquelleHinweis) || "").trim();
-    var stand = ((cfg && cfg.datenStand) || "").trim();
-    if (!hinweis && !stand) return "";
-    var standHtml = stand
-      ? '<p class="text-muted small mb-2">' + escapeHtml(stand) + "</p>"
-      : "";
-    return (
-      '<section class="qk-methodik mt-3">' +
-      '<button class="qk-methodik-toggle collapsed" type="button" ' +
-      'data-bs-toggle="collapse" data-bs-target="#qk-methodik-body" ' +
-      'aria-expanded="false" aria-controls="qk-methodik-body">' +
-      '<h2 class="h5 mb-0">Methodik &amp; Datenquelle</h2>' +
-      '<span class="qk-methodik-chevron" aria-hidden="true">&#9662;</span>' +
-      "</button>" +
-      '<div id="qk-methodik-body" class="collapse">' +
-      '<div class="qk-methodik-content">' +
-      standHtml +
-      hinweis +
-      "</div></div></section>"
-    );
-  }
-
   /* ── Schale 4: Weiterführende Links ── */
   function renderWeitereInfos(cfg) {
     var links = cfg && cfg.weiterfuehrendeLinks;

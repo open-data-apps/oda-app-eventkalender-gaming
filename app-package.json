@@ -16,9 +16,23 @@
     "### Für wen ist diese App?",
     "Diese App präsentiert Veranstaltungen im Gaming-Stil. Sie richtet sich an Gaming-affine Event-Entdecker:innen, die lokale Events auf spielerische Weise erkunden möchten."
   ],
-  "tags-funktion": ["Quest-Log", "Tactical-Map", "Leaderboard", "Gaming-Hub"],
-  "tags-dateityp": ["CSV", "JSON", "ICS"],
-  "tags-datenart": ["Gaming", "Esports", "LAN-Party", "Tabletop"],
+  "tags-funktion": [
+    "Quest-Log",
+    "Tactical-Map",
+    "Leaderboard",
+    "Gaming-Hub"
+  ],
+  "tags-dateityp": [
+    "CSV",
+    "JSON",
+    "ICS"
+  ],
+  "tags-datenart": [
+    "Gaming",
+    "Esports",
+    "LAN-Party",
+    "Tabletop"
+  ],
   "screenshots": [
     "assets/Desktop_Screenshot.png",
     "assets/Mobile_Screenshot.png"
@@ -207,7 +221,10 @@
       "hilfe": "Soll die Datenabfrage über den integrierten ODAS CORS-Proxy laufen?",
       "format": {
         "typ": "dropdown",
-        "optionen": ["nein", "ja"],
+        "optionen": [
+          "nein",
+          "ja"
+        ],
         "default": "nein"
       },
       "erforderlich": "ja"
@@ -239,10 +256,71 @@
       "hilfe": "Angabe der App-Sprache",
       "format": {
         "typ": "dropdown",
-        "optionen": ["de"],
+        "optionen": [
+          "de"
+        ],
         "default": "de"
       },
       "erforderlich": "ja"
+    },
+    "datenquelleHinweis": {
+      "label": "Methodik / Datenquelle-Hinweis",
+      "hilfe": "Herkunft, Erhebungsmethode und Limitierungen (HTML/Markdown). Leer = ausgeblendet.",
+      "format": {
+        "typ": "markdown"
+      },
+      "default": "<p>Die Veranstaltungsdaten werden aus verschiedenen Quellformaten (CKAN datastore_search, CSV, ICS) automatisch erkannt und normalisiert. Die KPI-Berechnung (Daily/Weekly Quests, Active Quest) basiert auf dem aktuellen Browser-Datum. Die Seltenheits-Klassifizierung (Common, Uncommon, Rare, Epic, Legendary) erfolgt anhand der Event-Häufigkeit im Datensatz.</p>",
+      "erforderlich": "nein"
+    },
+    "kpiKontext1": {
+      "label": "KPI-Erklärung 1: Daily Quests (heutige Events)",
+      "hilfe": "Erklärtext unter dem KPI-Wert. Leer = ausgeblendet.",
+      "format": {
+        "typ": "string",
+        "laenge": 250
+      },
+      "default": "",
+      "erforderlich": "nein"
+    },
+    "kpiKontext2": {
+      "label": "KPI-Erklärung 2: Active Quest (nächstes Event)",
+      "hilfe": "Erklärtext unter dem KPI-Wert. Leer = ausgeblendet.",
+      "format": {
+        "typ": "string",
+        "laenge": 250
+      },
+      "default": "",
+      "erforderlich": "nein"
+    },
+    "kpiKontext3": {
+      "label": "KPI-Erklärung 3: Weekly Quests (Events in 7 Tagen)",
+      "hilfe": "Erklärtext unter dem KPI-Wert. Leer = ausgeblendet.",
+      "format": {
+        "typ": "string",
+        "laenge": 250
+      },
+      "default": "",
+      "erforderlich": "nein"
+    },
+    "kpiKontext4": {
+      "label": "KPI-Erklärung 4: Quest Types (Kategorien)",
+      "hilfe": "Erklärtext unter dem KPI-Wert. Leer = ausgeblendet.",
+      "format": {
+        "typ": "string",
+        "laenge": 250
+      },
+      "default": "",
+      "erforderlich": "nein"
+    },
+    "kpiKontext5": {
+      "label": "KPI-Erklärung 5: Guilds (Veranstalter)",
+      "hilfe": "Erklärtext unter dem KPI-Wert. Leer = ausgeblendet.",
+      "format": {
+        "typ": "string",
+        "laenge": 250
+      },
+      "default": "",
+      "erforderlich": "nein"
     }
   }
 }
