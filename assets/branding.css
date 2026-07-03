@@ -10,12 +10,15 @@ body,
 
 /* Header Override */
 header,
-.header,
-#header,
-.navbar {
+.header {
   background-color: #0e0f14 !important;
   border-bottom: 2px solid #242942 !important;
   padding: 15px 20px !important;
+}
+
+#header,
+.navbar {
+  border-bottom: 0 !important;
 }
 
 /* Header Title */
@@ -47,13 +50,20 @@ header,
 
 /* Footer Override */
 footer,
-.footer,
-#footer-text {
+.footer {
   background-color: #0e0f14 !important;
   border-top: 2px solid #242942 !important;
   border-bottom: none !important;
   color: #8b9bb4 !important;
   padding: 1.5rem 1rem !important;
+}
+
+#footer-text {
+  background-color: transparent !important;
+  border-top: 0 !important;
+  border-bottom: none !important;
+  color: #8b9bb4 !important;
+  padding: 0 !important;
 }
 
 footer p,
@@ -131,4 +141,3 @@ a:hover {
 .text-white-50 {
   color: rgba(241, 245, 249, 0.7) !important;
 }
-

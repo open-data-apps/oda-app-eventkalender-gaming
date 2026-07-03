@@ -9,9 +9,12 @@
     "Der QuestKalender bringt städtische und regionale Gaming-Events direkt auf dein Dashboard.",
     "Finde aktive Quests (Events) im Quest Log, plane deine Strategie mit der Tactical Map, checke Mitspieler in der Co-Op Lobby und verfolge Statistiken im Leaderboard.",
     "Einzelne oder alle Quests können als iCal (.ics) direkt in deinen persönlichen Kalender exportiert werden.",
-    "",
-    "### Für wen ist diese App?",
-    "Diese App präsentiert Veranstaltungen im Gaming-Stil. Sie richtet sich an Gaming-affine Event-Entdecker:innen, die lokale Events auf spielerische Weise erkunden möchten."
+    "<h3>Für wen ist diese App?</h3>",
+    "Diese App präsentiert Veranstaltungen im Gaming-Stil. Sie richtet sich an Gaming-affine Event-Entdecker:innen, die lokale Events auf spielerische Weise erkunden möchten. Besondere Datenkenntnisse sind für die Nutzung nicht erforderlich.",
+    "<h3>Datenquelle</h3>",
+    "<ul><li><strong>Open Data Portal:</strong> <a href=\"https://open-data-musterstadt.ckan.de\" target=\"_blank\" rel=\"noopener\">open-data-musterstadt.ckan.de</a></li><li><strong>Datensatz:</strong> <a href=\"https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f\" target=\"_blank\" rel=\"noopener\">QuestKalender-Datensatz auf CKAN</a></li><li><strong>Ressource:</strong> <a href=\"https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f/resource/630c8c4b-a530-4880-becf-ac0b84ea922b\" target=\"_blank\" rel=\"noopener\">CSV-Ressource mit Veranstaltungen</a></li></ul>",
+    "<h3>Open Data App Store</h3>",
+    "Diese App ist für den Open Data App Store vorbereitet und kann von Kommunen mit eigenen Veranstaltungsdaten konfiguriert werden."
   ],
   "kontakt": [
     "Tel.: <a href='tel:+49711310093100'>0711-31009-3100</a><br>",
@@ -41,58 +44,11 @@
   "proxyAktiv": "ja",
   "sprache": "de",
   "datenStand": "2026-07-03",
-  "weiterfuehrendeLinks": [
-    "[Datenquelle auf CKAN](https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f)"
-  ],
+  "weiterfuehrendeLinks": "<ul><li><a href=\"https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f\" target=\"_blank\" rel=\"noopener\">Datenquelle auf CKAN</a></li><li><a href=\"https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f/resource/630c8c4b-a530-4880-becf-ac0b84ea922b\" target=\"_blank\" rel=\"noopener\">CSV-Ressource</a></li></ul>",
   "datenquelleHinweis": "Multi-Format-Parsing (CKAN \\`datastore_search\\`, CSV, ICS/iCalendar RFC 5545), Datumsbereich-Filterung, Countdown-Logik (Browser-Zeit), Seltenheits-Klassifizierung (Common/Rare/Epic/Legendary).",
-  "kpiKontext1": {
-    "label": "KPI Kontext 1",
-    "hilfe": "Erklärungstext für KPI-Kachel 1",
-    "format": {
-      "typ": "string",
-      "laenge": 250
-    },
-    "default": "",
-    "erforderlich": "nein"
-  },
-  "kpiKontext2": {
-    "label": "KPI Kontext 2",
-    "hilfe": "Erklärungstext für KPI-Kachel 2",
-    "format": {
-      "typ": "string",
-      "laenge": 250
-    },
-    "default": "",
-    "erforderlich": "nein"
-  },
-  "kpiKontext3": {
-    "label": "KPI Kontext 3",
-    "hilfe": "Erklärungstext für KPI-Kachel 3",
-    "format": {
-      "typ": "string",
-      "laenge": 250
-    },
-    "default": "",
-    "erforderlich": "nein"
-  },
-  "kpiKontext4": {
-    "label": "KPI Kontext 4",
-    "hilfe": "Erklärungstext für KPI-Kachel 4",
-    "format": {
-      "typ": "string",
-      "laenge": 250
-    },
-    "default": "",
-    "erforderlich": "nein"
-  },
-  "kpiKontext5": {
-    "label": "KPI Kontext 5",
-    "hilfe": "Erklärungstext für KPI-Kachel 5",
-    "format": {
-      "typ": "string",
-      "laenge": 250
-    },
-    "default": "",
-    "erforderlich": "nein"
-  }
+  "kpiKontext1": "Anzahl der Veranstaltungen, die heute stattfinden oder bereits laufen. Zeigt, wie viel im Kalender gerade los ist.",
+  "kpiKontext2": "Titel der nächstbeginnenden Veranstaltung mit Countdown. Ihre nächste Gelegenheit zum Mitmachen.",
+  "kpiKontext3": "Anzahl der Veranstaltungen in den kommenden 7 Tagen. Ein Ausblick auf die nahe Zukunft und Planungshilfe für die Woche.",
+  "kpiKontext4": "Anzahl der verschiedenen Veranstaltungskategorien (z.B. Sport, Kultur, Bildung). Zeigt die thematische Vielfalt des Kalenders.",
+  "kpiKontext5": "Anzahl der verschiedenen Veranstalter und Organisationen. Spricht für ein breites und aktives Netzwerk."
 }

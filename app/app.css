@@ -660,12 +660,15 @@ h1, h2, h3, h4, h5, h6, .app-title {
 
 /* Shell Theming - Header, Footer, and Side Menu Drawer */
 header,
-.header,
-#header,
-.navbar {
+.header {
   background-color: #0e0f14 !important;
   border-bottom: 2px solid #242942 !important;
   padding: 15px 20px !important;
+}
+
+#header,
+.navbar {
+  border-bottom: 0 !important;
 }
 
 .title,
@@ -694,13 +697,20 @@ header,
 }
 
 footer,
-.footer,
-#footer-text {
+.footer {
   background-color: #0e0f14 !important;
   border-top: 2px solid #242942 !important;
   border-bottom: none !important;
   color: #8b9bb4 !important;
   padding: 1.5rem 1rem !important;
+}
+
+#footer-text {
+  background-color: transparent !important;
+  border-top: 0 !important;
+  border-bottom: none !important;
+  color: #8b9bb4 !important;
+  padding: 0 !important;
 }
 
 footer p,
@@ -760,22 +770,33 @@ footer p,
 
 /* Schale 4: Weiterführende Links */
 .qk-weitere-infos {
-  background: rgba(30, 30, 40, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.5rem;
-  padding: 1rem;
+  background: var(--event-bg-card);
+  border: 1px solid var(--event-border);
+  border-radius: var(--event-border-radius);
+  padding: 1.25rem;
+  box-shadow: var(--event-card-shadow);
 }
 .qk-weitere-infos-content :last-child { margin-bottom: 0; }
-.qk-weitere-infos-content a { color: var(--bs-info); overflow-wrap: anywhere; }
+.qk-weitere-infos-content a { color: var(--event-primary); overflow-wrap: anywhere; }
+.qk-weitere-infos-content a:hover { color: #ffffff; text-shadow: 0 0 8px rgba(0, 240, 255, 0.5); }
 
-.qk-methodik { border: 1px solid var(--bs-border-color); border-radius: 0.5rem; background: var(--bs-body-bg); overflow: hidden; }
-.qk-methodik-toggle { width: 100%; border: 0; background: transparent; color: inherit; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem; text-align: left; }
-.qk-methodik-toggle:hover, .qk-methodik-toggle:focus-visible { background: rgba(var(--bs-primary-rgb), 0.05); outline: none; }
-.qk-methodik-chevron { transition: transform 0.18s ease; }
+.qk-methodik {
+  background: var(--event-bg-card);
+  border: 1px solid var(--event-border);
+  border-radius: var(--event-border-radius);
+  box-shadow: var(--event-card-shadow);
+  overflow: hidden;
+}
+.qk-methodik-toggle { width: 100%; border: 0; background: transparent; color: var(--event-text); font-family: 'Orbitron', sans-serif; font-weight: 700; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.25rem; text-align: left; text-transform: uppercase; letter-spacing: 1px; }
+.qk-methodik-toggle:hover, .qk-methodik-toggle:focus-visible { background: rgba(0, 240, 255, 0.08); outline: none; color: var(--event-primary); }
+.qk-methodik-chevron { transition: transform 0.18s ease; font-size: 1.25rem; }
 .qk-methodik-toggle[aria-expanded="true"] .qk-methodik-chevron { transform: rotate(180deg); }
-.qk-methodik-content { border-top: 1px solid var(--bs-border-color); padding: 1rem; }
+.qk-methodik-content { border-top: 1px solid var(--event-border); padding: 1.25rem; color: var(--event-text); }
 .qk-methodik-content p:last-child { margin-bottom: 0; }
-.qk-kpi-info-toggle { border: 0; background: transparent; color: var(--bs-secondary-color); width: 1.75rem; height: 1.75rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 0; }
-.qk-kpi-info-toggle:hover, .qk-kpi-info-toggle:focus-visible, .qk-kpi-info-toggle:not(.collapsed) { color: var(--bs-primary); background: rgba(var(--bs-primary-rgb), 0.08); outline: none; }
+.qk-methodik-content a { color: var(--event-primary); }
+.qk-methodik-content a:hover { color: #ffffff; }
+
+.qk-kpi-info-toggle { border: 0; background: transparent; color: var(--event-text-muted); width: 1.75rem; height: 1.75rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 0; transition: all 0.2s ease; }
+.qk-kpi-info-toggle:hover, .qk-kpi-info-toggle:focus-visible, .qk-kpi-info-toggle:not(.collapsed) { color: var(--event-primary); background: rgba(0, 240, 255, 0.12); outline: none; text-shadow: 0 0 8px rgba(0, 240, 255, 0.4); }
 .qk-kpi-info-icon { font-size: 1rem; line-height: 1; }
-.qk-kpi-kontext { margin-top: 0.5rem; color: var(--bs-secondary-color); font-size: 0.875rem; line-height: 1.4; }
+.qk-kpi-kontext { margin-top: 0.5rem; color: var(--event-text-muted); font-size: 0.875rem; line-height: 1.4; }
