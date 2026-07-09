@@ -133,12 +133,10 @@
       },
       "default": [
         "_multiline_",
-        "### Herausgeber",
-        "Stadt Esslingen am Neckar",
-        "Rathausplatz 1",
-        "73728 Esslingen",
-        "### App-Entwicklung",
-        "Ondics GmbH<br>Blumenstraße 19<br>73728 Esslingen"
+        "<h4>Herausgeber</h4>",
+        "<p>Stadt Esslingen am Neckar<br>Rathausplatz 1<br>73728 Esslingen</p>",
+        "<h4>App-Entwicklung</h4>",
+        "<p>Ondics GmbH<br>Blumenstraße 19<br>73728 Esslingen</p>"
       ],
       "erforderlich": "ja"
     },
