@@ -22,6 +22,64 @@ Die App ist eine Single Page Application (Webapp) mit:
 ## Datenformat
 Die App unterstützt sowohl **JSON** (inklusive CKAN Datastore), **CSV** (mit automatischer Delimiter-Erkennung) als auch **iCal / ICS**-Feeds als direkte Datenquellen über die API-URL / Ressourcen-ID.
 
+Das Feldmodell ist in `assets/schema.json` als Frictionless *tabular-data-resource*
+beschrieben. Pflichtfelder sind `event_id`, `titel` und `datum_start`; Datensätze ohne
+Startzeitpunkt werden verworfen.
+
+> **Hinweis zur CSV-Struktur:** Das Trennzeichen wird ausschließlich aus der **Kopfzeile**
+> abgeleitet. Enthält diese ein Semikolon, wird die gesamte Datei als semikolongetrennt
+> gelesen. Außerdem darf kein Feld einen Zeilenumbruch enthalten — auch nicht in
+> Anführungszeichen. Beschreibungen müssen daher einzeilig bleiben.
+
+### Mitgelieferter Referenzdatensatz
+
+Für diese App existiert **keine reale kommunale Datenquelle**; sie wurde gegen einen
+eigens erstellten Beispieldatensatz entwickelt. Dieser liegt in zwei Fassungen bei und ist
+zum Hochladen in ein Open-Data-Portal vorgesehen:
+
+| Datei | Format | Rolle |
+| --- | --- | --- |
+| `assets/events.csv` | CSV, 20 Datensätze | **maßgebliche Ressource**, auf die `apiurl` zeigt |
+| `assets/events.ics` | iCalendar (RFC 5545) | dieselben Termine für Kalenderanwendungen |
+
+Die Termine liegen rollierend um den 30.07.2026 — einige abgeschlossen, einige in der
+laufenden Woche, der Großteil in der Zukunft — damit alle Kennzahlen der Startseite
+belegt sind. Enthalten sind alle sechs Kategorien, ein abgesagter Termin und zwei
+Wiederholungsregeln.
+
+**Alle Inhalte sind frei erfunden.** Veranstalter, Kontaktadressen und Weblinks verweisen
+durchgängig auf `example.org`; die Veranstaltungsorte sind fiktiv. Lediglich die
+Geokoordinaten liegen im Raum Esslingen, damit die Kartenansicht sinnvoll zentriert.
+
+<details>
+<summary>Beschreibungstext für die Portal-Ressource</summary>
+
+> **Veranstaltungskalender (Beispieldatensatz)**
+>
+> Beispielhafter Veranstaltungskalender mit 20 Terminen aus dem Bereich Gaming, E-Sport
+> und digitale Jugendkultur. Der Datensatz dient der Erprobung von Kalenderanwendungen im
+> Open Data App Store und enthält **ausschließlich frei erfundene Veranstaltungen**;
+> Veranstalter, Kontaktdaten und Weblinks sind Platzhalter (`example.org`). Die
+> Geokoordinaten liegen im Raum Esslingen am Neckar, damit Kartendarstellungen sinnvoll
+> funktionieren.
+>
+> Felder: `event_id`, `titel`, `beschreibung`, `datum_start`, `datum_ende`, `zeitzone`,
+> `ort_name`, `ort_adresse`, `ort_lat`, `ort_lon`, `kategorie`, `teilnehmer`,
+> `veranstalter`, `kontakt_email`, `url`, `status`, `wiederholung`.
+>
+> Zeitangaben nach ISO 8601 in der Zeitzone `Europe/Berlin`. `kategorie` ist auf
+> LAN-Party, Turnier, Community, Workshop, Convention und Sonstiges beschränkt, `status`
+> auf geplant, abgesagt und abgeschlossen. `wiederholung` enthält, sofern belegt, eine
+> iCalendar-RRULE. Das Feldmodell liegt als Frictionless-Schema bei.
+>
+> Lizenz: CC BY 4.0
+
+</details>
+
+Nach dem Hochladen sind `apiurl` und `resourceId` in `odas-config/config.json` auf die
+reale Ressource zu setzen; die Links in `beschreibung` und `weiterfuehrendeLinks` sind
+entsprechend nachzuziehen.
+
 ---
 
 ### Systemvoraussetzungen

@@ -1,0 +1,375 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Musterstadt//QuestKalender Referenzdatensatz//DE
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:QuestKalender Musterstadt
+X-WR-TIMEZONE:Europe/Berlin
+BEGIN:VEVENT
+UID:1@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20260703T170000
+DTEND;TZID=Europe/Berlin:20260703T220000
+SUMMARY:Pixel Arena Sommer-Cup
+DESCRIPTION:Offenes Einsteigerturnier auf sechs Stationen. Gespielt wird in
+  Zweierteams\, Hardware steht bereit. Die Platzierungen fliessen in die Sa
+ isonwertung ein.
+LOCATION:Quest Arena Nord\, Musterweg 4\, 73728 Esslingen
+GEO:48.7462;9.3011
+CATEGORIES:Turnier
+ORGANIZER;CN=Quest Guild Musterstadt:mailto:cup@example.org
+ATTENDEE;CN=Teams;ROLE=REQ-PARTICIPANT:mailto:cup@example.org
+ATTENDEE;CN=Schiedsrichter;ROLE=REQ-PARTICIPANT:mailto:cup@example.org
+ATTENDEE;CN=Zuschauer;ROLE=REQ-PARTICIPANT:mailto:cup@example.org
+URL:https://questkalender.example.org/pixel-arena
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:2@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20260708T140000
+DTEND;TZID=Europe/Berlin:20260708T180000
+SUMMARY:Level Up: Einstieg in die Spieleentwicklung
+DESCRIPTION:Vierstuendiger Grundlagenkurs zu Szenenaufbau\, Kollisionen und
+  Steuerung. Laptops werden gestellt\, Vorkenntnisse sind nicht erforderlic
+ h.
+LOCATION:Werkstatt Digital\, Beispielstrasse 22\, 73730 Esslingen
+GEO:48.7351;9.2934
+CATEGORIES:Workshop
+ORGANIZER;CN=Digitalwerkstatt Musterstadt:mailto:workshop@example.org
+ATTENDEE;CN=Dozentinnen;ROLE=REQ-PARTICIPANT:mailto:workshop@example.org
+ATTENDEE;CN=Einsteiger;ROLE=REQ-PARTICIPANT:mailto:workshop@example.org
+ATTENDEE;CN=Betreuung;ROLE=REQ-PARTICIPANT:mailto:workshop@example.org
+URL:https://questkalender.example.org/level-up
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:3@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20260715T160000
+DTEND;TZID=Europe/Berlin:20260715T210000
+SUMMARY:Retro Roundup: Konsolen der 90er
+DESCRIPTION:Sechs Konsolengenerationen zum Ausprobieren\, dazu ein Fun-Turn
+ ier ohne Wertung. Ein Reparaturtisch fuer eigene Geraete ist eingerichtet.
+LOCATION:Buergertreff Ost\, Beispielallee 9\, 73728 Esslingen
+GEO:48.7408;9.3182
+CATEGORIES:Community
+ORGANIZER;CN=Verein Spielkultur Musterstadt:mailto:retro@example.org
+ATTENDEE;CN=Retro-Fans;ROLE=REQ-PARTICIPANT:mailto:retro@example.org
+ATTENDEE;CN=Technikteam;ROLE=REQ-PARTICIPANT:mailto:retro@example.org
+ATTENDEE;CN=Familien;ROLE=REQ-PARTICIPANT:mailto:retro@example.org
+URL:https://questkalender.example.org/retro-roundup
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:4@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20260722T180000
+DTEND;TZID=Europe/Berlin:20260723T180000
+SUMMARY:Nachtschicht LAN 24h
+DESCRIPTION:Vierundzwanzig Stunden mit eigenem Rechner oder eigener Konsole
+ . Stromverteilung und Netzwerk sind gestellt\, Schlafbereich vorhanden.
+LOCATION:Halle 7 Musterstadt\, Industriestrasse 31\, 73734 Esslingen
+GEO:48.7284;9.3241
+CATEGORIES:LAN-Party
+ORGANIZER;CN=Nachtschicht Kollektiv:mailto:lan@example.org
+ATTENDEE;CN=Organisation;ROLE=REQ-PARTICIPANT:mailto:lan@example.org
+ATTENDEE;CN=Teilnehmende;ROLE=REQ-PARTICIPANT:mailto:lan@example.org
+ATTENDEE;CN=Technik;ROLE=REQ-PARTICIPANT:mailto:lan@example.org
+ATTENDEE;CN=Catering;ROLE=REQ-PARTICIPANT:mailto:lan@example.org
+URL:https://questkalender.example.org/nachtschicht
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:5@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20260727T190000
+DTEND;TZID=Europe/Berlin:20260727T230000
+SUMMARY:Tabletop-Abend: Kampagnenstart
+DESCRIPTION:Offener Rollenspielabend fuer Neugierige und Erfahrene. Spielle
+ itungen fuehren durch kurze Einstiegsabenteuer\, Material ist vorhanden.
+LOCATION:Buergertreff Ost\, Beispielallee 9\, 73728 Esslingen
+GEO:48.7408;9.3182
+CATEGORIES:Community
+ORGANIZER;CN=Verein Spielkultur Musterstadt:mailto:tabletop@example.org
+ATTENDEE;CN=Spielleitungen;ROLE=REQ-PARTICIPANT:mailto:tabletop@example.org
+ATTENDEE;CN=Gruppen;ROLE=REQ-PARTICIPANT:mailto:tabletop@example.org
+ATTENDEE;CN=Neulinge;ROLE=REQ-PARTICIPANT:mailto:tabletop@example.org
+URL:https://questkalender.example.org/tabletop
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:6@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20260729T100000
+DTEND;TZID=Europe/Berlin:20260731T180000
+SUMMARY:Musterstadt Game Convention
+DESCRIPTION:Dreitaegige Messe mit Ausstellerflaechen\, Vortragsbuehne und T
+ urnierbereich. Tagestickets und Dauerkarten sind an der Abendkasse erhaelt
+ lich.
+LOCATION:Messehalle Musterstadt\, Messeplatz 1\, 73734 Esslingen
+GEO:48.7269;9.3296
+CATEGORIES:Convention
+ORGANIZER;CN=Convention Musterstadt gGmbH:mailto:convention@example.org
+ATTENDEE;CN=Aussteller;ROLE=REQ-PARTICIPANT:mailto:convention@example.org
+ATTENDEE;CN=Besucher;ROLE=REQ-PARTICIPANT:mailto:convention@example.org
+ATTENDEE;CN=Presse;ROLE=REQ-PARTICIPANT:mailto:convention@example.org
+ATTENDEE;CN=Helfende;ROLE=REQ-PARTICIPANT:mailto:convention@example.org
+URL:https://questkalender.example.org/convention
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:7@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20260730T183000
+DTEND;TZID=Europe/Berlin:20260730T220000
+SUMMARY:Feierabend-Runde: Koop-Abend
+DESCRIPTION:Offener Treff fuer gemeinsame Koop-Partien. Kein Turnier\, kein
+ e Anmeldung\, wechselnde Titel nach Absprache vor Ort.
+LOCATION:Quest Cafe Mitte\, Marktgasse 15\, 73728 Esslingen
+GEO:48.7395;9.3068
+CATEGORIES:Community
+ORGANIZER;CN=Quest Guild Musterstadt:mailto:koop@example.org
+ATTENDEE;CN=Stammtisch;ROLE=REQ-PARTICIPANT:mailto:koop@example.org
+ATTENDEE;CN=Gaeste;ROLE=REQ-PARTICIPANT:mailto:koop@example.org
+URL:https://questkalender.example.org/feierabend
+STATUS:CONFIRMED
+RRULE:FREQ=WEEKLY;BYDAY=TH;COUNT=8
+END:VEVENT
+BEGIN:VEVENT
+UID:8@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20260801T150000
+DTEND;TZID=Europe/Berlin:20260801T200000
+SUMMARY:Sommer-Ligafinale
+DESCRIPTION:Endspiele der Sommerliga in zwei Disziplinen\, uebertragen auf 
+ Grossbildleinwand. Der Eintritt fuer Zuschauende ist frei.
+LOCATION:Quest Arena Nord\, Musterweg 4\, 73728 Esslingen
+GEO:48.7462;9.3011
+CATEGORIES:Turnier
+ORGANIZER;CN=Liga Musterstadt:mailto:liga@example.org
+ATTENDEE;CN=Finalteams;ROLE=REQ-PARTICIPANT:mailto:liga@example.org
+ATTENDEE;CN=Schiedsrichter;ROLE=REQ-PARTICIPANT:mailto:liga@example.org
+ATTENDEE;CN=Kommentatoren;ROLE=REQ-PARTICIPANT:mailto:liga@example.org
+ATTENDEE;CN=Publikum;ROLE=REQ-PARTICIPANT:mailto:liga@example.org
+URL:https://questkalender.example.org/ligafinale
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:9@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20260803T170000
+DTEND;TZID=Europe/Berlin:20260803T203000
+SUMMARY:Streaming-Werkstatt: Ton und Bild
+DESCRIPTION:Praxiskurs zu Mikrofonwahl\, Ausleuchtung und Szenenaufbau. Eig
+ ene Technik kann mitgebracht und eingerichtet werden.
+LOCATION:Werkstatt Digital\, Beispielstrasse 22\, 73730 Esslingen
+GEO:48.7351;9.2934
+CATEGORIES:Workshop
+ORGANIZER;CN=Digitalwerkstatt Musterstadt:mailto:stream@example.org
+ATTENDEE;CN=Dozentinnen;ROLE=REQ-PARTICIPANT:mailto:stream@example.org
+ATTENDEE;CN=Streamende;ROLE=REQ-PARTICIPANT:mailto:stream@example.org
+ATTENDEE;CN=Technikteam;ROLE=REQ-PARTICIPANT:mailto:stream@example.org
+URL:https://questkalender.example.org/streaming
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:10@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20260805T140000
+DTEND;TZID=Europe/Berlin:20260805T190000
+SUMMARY:Brettspiel-Lounge am Wochenende
+DESCRIPTION:Offene Spielausleihe mit ueber zweihundert Titeln und Erklaerba
+ eren an jedem Tisch. Fuer Verpflegung ist gesorgt.
+LOCATION:Quest Cafe Mitte\, Marktgasse 15\, 73728 Esslingen
+GEO:48.7395;9.3068
+CATEGORIES:Community
+ORGANIZER;CN=Verein Spielkultur Musterstadt:mailto:brettspiel@example.org
+ATTENDEE;CN=Erklaerteam;ROLE=REQ-PARTICIPANT:mailto:brettspiel@example.org
+ATTENDEE;CN=Familien;ROLE=REQ-PARTICIPANT:mailto:brettspiel@example.org
+ATTENDEE;CN=Vielspieler;ROLE=REQ-PARTICIPANT:mailto:brettspiel@example.org
+URL:https://questkalender.example.org/lounge
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:11@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20260806T160000
+DTEND;TZID=Europe/Berlin:20260806T230000
+SUMMARY:Speedrun-Schaulauf zugunsten des Jugendtreffs
+DESCRIPTION:Laufende Bestzeitversuche mit Erlaeuterung der Strecken. Die Sp
+ endeneinnahmen gehen vollstaendig an den Jugendtreff.
+LOCATION:Buergertreff Ost\, Beispielallee 9\, 73728 Esslingen
+GEO:48.7408;9.3182
+CATEGORIES:Sonstiges
+ORGANIZER;CN=Jugendtreff Musterstadt:mailto:speedrun@example.org
+ATTENDEE;CN=Laufende;ROLE=REQ-PARTICIPANT:mailto:speedrun@example.org
+ATTENDEE;CN=Moderation;ROLE=REQ-PARTICIPANT:mailto:speedrun@example.org
+ATTENDEE;CN=Spendenteam;ROLE=REQ-PARTICIPANT:mailto:speedrun@example.org
+URL:https://questkalender.example.org/speedrun
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:12@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20260814T160000
+DTEND;TZID=Europe/Berlin:20260816T160000
+SUMMARY:Nachtschicht LAN 48h
+DESCRIPTION:Die grosse Ausgabe ueber zwei Naechte mit Turnierblock\, Freisp
+ ielflaeche und Fruehstuecksversorgung. Anmeldung erforderlich.
+LOCATION:Halle 7 Musterstadt\, Industriestrasse 31\, 73734 Esslingen
+GEO:48.7284;9.3241
+CATEGORIES:LAN-Party
+ORGANIZER;CN=Nachtschicht Kollektiv:mailto:lan@example.org
+ATTENDEE;CN=Organisation;ROLE=REQ-PARTICIPANT:mailto:lan@example.org
+ATTENDEE;CN=Teilnehmende;ROLE=REQ-PARTICIPANT:mailto:lan@example.org
+ATTENDEE;CN=Technik;ROLE=REQ-PARTICIPANT:mailto:lan@example.org
+ATTENDEE;CN=Catering;ROLE=REQ-PARTICIPANT:mailto:lan@example.org
+ATTENDEE;CN=Sanitaetsdienst;ROLE=REQ-PARTICIPANT:mailto:lan@example.org
+URL:https://questkalender.example.org/nachtschicht-48
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:13@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20260822T130000
+DTEND;TZID=Europe/Berlin:20260822T190000
+SUMMARY:Herbstpokal Qualifikation
+DESCRIPTION:Erste Qualifikationsrunde fuer den Herbstpokal. Gespielt wird i
+ m Modus doppelte Ausscheidung\, Anmeldung bis eine Woche vorher.
+LOCATION:Quest Arena Nord\, Musterweg 4\, 73728 Esslingen
+GEO:48.7462;9.3011
+CATEGORIES:Turnier
+ORGANIZER;CN=Liga Musterstadt:mailto:pokal@example.org
+ATTENDEE;CN=Teams;ROLE=REQ-PARTICIPANT:mailto:pokal@example.org
+ATTENDEE;CN=Schiedsrichter;ROLE=REQ-PARTICIPANT:mailto:pokal@example.org
+ATTENDEE;CN=Zuschauer;ROLE=REQ-PARTICIPANT:mailto:pokal@example.org
+URL:https://questkalender.example.org/herbstpokal
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:14@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20260829T130000
+DTEND;TZID=Europe/Berlin:20260829T180000
+SUMMARY:Kostuemtreff und Werkstattschau
+DESCRIPTION:Vorstellung selbstgebauter Kostueme mit offener Bastelflaeche. 
+ Werkzeug und Material stehen zum Ausprobieren bereit.
+LOCATION:Buergertreff Ost\, Beispielallee 9\, 73728 Esslingen
+GEO:48.7408;9.3182
+CATEGORIES:Community
+ORGANIZER;CN=Verein Spielkultur Musterstadt:mailto:kostuem@example.org
+ATTENDEE;CN=Bastelnde;ROLE=REQ-PARTICIPANT:mailto:kostuem@example.org
+ATTENDEE;CN=Fotoecke;ROLE=REQ-PARTICIPANT:mailto:kostuem@example.org
+ATTENDEE;CN=Jury;ROLE=REQ-PARTICIPANT:mailto:kostuem@example.org
+URL:https://questkalender.example.org/kostuemtreff
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:15@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20260905T180000
+DTEND;TZID=Europe/Berlin:20260905T210000
+SUMMARY:Programmierkurs: Spiellogik in vier Abenden
+DESCRIPTION:Vierteilige Reihe von den Grundlagen bis zum lauffaehigen Proto
+ typ. Der Kurs baut aufeinander auf\, ein Einstieg ist nur am ersten Termin
+  sinnvoll.
+LOCATION:Werkstatt Digital\, Beispielstrasse 22\, 73730 Esslingen
+GEO:48.7351;9.2934
+CATEGORIES:Workshop
+ORGANIZER;CN=Digitalwerkstatt Musterstadt:mailto:kurs@example.org
+ATTENDEE;CN=Dozentinnen;ROLE=REQ-PARTICIPANT:mailto:kurs@example.org
+ATTENDEE;CN=Kursgruppe;ROLE=REQ-PARTICIPANT:mailto:kurs@example.org
+URL:https://questkalender.example.org/programmierkurs
+STATUS:CONFIRMED
+RRULE:FREQ=WEEKLY;BYDAY=SA;COUNT=4
+END:VEVENT
+BEGIN:VEVENT
+UID:16@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20260912T110000
+DTEND;TZID=Europe/Berlin:20260912T190000
+SUMMARY:Indie-Schaufenster Musterstadt
+DESCRIPTION:Praesentation regionaler Entwicklungsteams mit spielbaren Fassu
+ ngen und offener Fragerunde. Rueckmeldungen der Besuchenden sind ausdrueck
+ lich erwuenscht.
+LOCATION:Messehalle Musterstadt\, Messeplatz 1\, 73734 Esslingen
+GEO:48.7269;9.3296
+CATEGORIES:Convention
+ORGANIZER;CN=Convention Musterstadt gGmbH:mailto:indie@example.org
+ATTENDEE;CN=Entwicklungsteams;ROLE=REQ-PARTICIPANT:mailto:indie@example.org
+ATTENDEE;CN=Besucher;ROLE=REQ-PARTICIPANT:mailto:indie@example.org
+ATTENDEE;CN=Fachpublikum;ROLE=REQ-PARTICIPANT:mailto:indie@example.org
+URL:https://questkalender.example.org/indie-schaufenster
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:17@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20260919T130000
+DTEND;TZID=Europe/Berlin:20260919T190000
+SUMMARY:Herbstpokal Zwischenrunde
+DESCRIPTION:Der Termin entfaellt\, weil die Halle kurzfristig nicht zur Ver
+ fuegung steht. Ein Ersatztermin wird ueber die Ligaseite bekanntgegeben.
+LOCATION:Quest Arena Nord\, Musterweg 4\, 73728 Esslingen
+GEO:48.7462;9.3011
+CATEGORIES:Turnier
+ORGANIZER;CN=Liga Musterstadt:mailto:pokal@example.org
+ATTENDEE;CN=Teams;ROLE=REQ-PARTICIPANT:mailto:pokal@example.org
+ATTENDEE;CN=Schiedsrichter;ROLE=REQ-PARTICIPANT:mailto:pokal@example.org
+URL:https://questkalender.example.org/herbstpokal
+STATUS:CANCELLED
+END:VEVENT
+BEGIN:VEVENT
+UID:18@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20260926T180000
+DTEND;TZID=Europe/Berlin:20260926T220000
+SUMMARY:Spieleabend fuer Einsteigerinnen und Einsteiger
+DESCRIPTION:Ruhiger Abend mit Anleitung an jedem Tisch\, ausdruecklich fuer
+  Menschen ohne Vorerfahrung. Anmeldung nicht erforderlich.
+LOCATION:Quest Cafe Mitte\, Marktgasse 15\, 73728 Esslingen
+GEO:48.7395;9.3068
+CATEGORIES:Community
+ORGANIZER;CN=Quest Guild Musterstadt:mailto:einstieg@example.org
+ATTENDEE;CN=Erklaerteam;ROLE=REQ-PARTICIPANT:mailto:einstieg@example.org
+ATTENDEE;CN=Neulinge;ROLE=REQ-PARTICIPANT:mailto:einstieg@example.org
+URL:https://questkalender.example.org/einsteigerabend
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:19@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20261010T140000
+DTEND;TZID=Europe/Berlin:20261011T120000
+SUMMARY:Herbst-LAN im Buergerhaus
+DESCRIPTION:Kleinere LAN mit vierzig Plaetzen und Schwerpunkt auf Koop-Tite
+ ln. Verpflegung ist im Beitrag enthalten.
+LOCATION:Halle 7 Musterstadt\, Industriestrasse 31\, 73734 Esslingen
+GEO:48.7284;9.3241
+CATEGORIES:LAN-Party
+ORGANIZER;CN=Nachtschicht Kollektiv:mailto:herbstlan@example.org
+ATTENDEE;CN=Organisation;ROLE=REQ-PARTICIPANT:mailto:herbstlan@example.org
+ATTENDEE;CN=Teilnehmende;ROLE=REQ-PARTICIPANT:mailto:herbstlan@example.org
+ATTENDEE;CN=Technik;ROLE=REQ-PARTICIPANT:mailto:herbstlan@example.org
+URL:https://questkalender.example.org/herbst-lan
+STATUS:CONFIRMED
+END:VEVENT
+BEGIN:VEVENT
+UID:20@questkalender.example.org
+DTSTAMP:20260730T090000Z
+DTSTART;TZID=Europe/Berlin:20261022T190000
+DTEND;TZID=Europe/Berlin:20261022T223000
+SUMMARY:Jahresabschluss: Spielekultur im Rueckblick
+DESCRIPTION:Vortrags- und Diskussionsabend zur Entwicklung der lokalen Spie
+ leszene\, anschliessend offener Ausklang.
+LOCATION:Buergertreff Ost\, Beispielallee 9\, 73728 Esslingen
+GEO:48.7408;9.3182
+CATEGORIES:Sonstiges
+ORGANIZER;CN=Verein Spielkultur Musterstadt:mailto:rueckblick@example.org
+ATTENDEE;CN=Vortragende;ROLE=REQ-PARTICIPANT:mailto:rueckblick@example.org
+ATTENDEE;CN=Publikum;ROLE=REQ-PARTICIPANT:mailto:rueckblick@example.org
+URL:https://questkalender.example.org/jahresabschluss
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

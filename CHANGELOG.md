@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.6.0 - 2026-07-30
+
+- **ENH:** Referenzdatensatz `assets/events.csv` neu erstellt (20 Termine, rollierend um den 30.07.2026). Der bisherige Bestand lag vollständig in der Vergangenheit (15.05.–31.05.2026), wodurch sämtliche Kennzahlen der Startseite auf null standen und der Kalender leer blieb
+- **ENH:** `assets/events.ics` als zweite Fassung desselben Datensatzes im iCalendar-Format (RFC 5545) ergänzt — zum Hochladen als weitere Portal-Ressource und für Kalenderanwendungen
+- **ENH:** Datensatz nutzt alle sechs Kategorien, enthält einen abgesagten Termin und zwei Wiederholungsregeln; Veranstalter, Kontaktadressen und Weblinks sind erkennbar fiktiv (`example.org`). Bisher waren erfundene Veranstaltungen real existierenden Einrichtungen zugeschrieben
+- **ENH:** `assets/events-mock.json` auf denselben Inhalt gebracht, damit der Fallback keinen anderen Datenstand zeigt als die Quelle
+- **DOC:** README beschreibt den Referenzdatensatz, seine Rolle beim Portal-Upload und die CSV-Randbedingungen der App; Beschreibungstext für die Portal-Ressource beigelegt
+- **FIX:** `daten.beispiel` verweist auf `assets/events.csv` statt auf die Mock-Datei
+- **FIX:** Laufzeitfehler nach dem Laden der Konfiguration werden jetzt sichtbar gemeldet; `handleRouting()` wird `await`et und besitzt einen Fehlerpfad
+- **FIX:** `getConfigUrl()` schneidet bei einer URL ohne abschließenden Schrägstrich nicht mehr das letzte Verzeichnis ab
+- **FIX:** Klick auf einen Hash-Link, der bereits die aktive Seite bezeichnet, rendert die Seite neu (`setupSamePageLinks()`) — das Logo führt damit aus Unteransichten zurück zur Startseite
+- **ENH:** `app/app-base.js` ist wieder byte-identisch zum Template `oda-generic` 1.4.0. Der App-eigene Localhost-Umschreiber fuer den Branding-CSS-Pfad entfaellt. Er loeste ein reales Problem — lokal und im ODAS-Live-Betrieb liegt die Seite unter unterschiedlichen Pfaden. Stattdessen traegt `odas-config/config.json` jetzt die Testform `../assets/...`
+- **FIX:** `datenStand` von `2026-07-03` auf `2026-07-30` gezogen (Konfiguration und `instanz-config`-Default); der Wert wird auf der Startseite sichtbar angezeigt und passt jetzt zum neuen Referenzdatensatz
+- **FIX:** Ein Klick auf einen Eintrag in der Liste zeigt die Details jetzt auch bei CSV- und ICS-Quellen an. Der Lookup verglich die ID der angeklickten Zeile (immer ein String) strikt mit `event_id` aus den Daten; CSV und ICS liefern dort einen String, JSON eine Zahl, sodass `"1" === 1` fehlschlug und stumm der Leerzustand „Keine Veranstaltung ausgewaehlt“ stehen blieb. `event_id` wird jetzt bei der Normalisierung einheitlich als String gefuehrt
+
 ## 1.5.0 - 2026-07-24
 
 - **FIX:** Laufzeit-Fehlermeldung wird vor der Anzeige HTML-maskiert (`escapeHtmlForBase`); ein Fehlertext kann kein Markup mehr in die Seite einschleusen (XSS)

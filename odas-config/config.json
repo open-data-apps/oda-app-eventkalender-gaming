@@ -4,7 +4,7 @@
   "seitentitel": "QuestKalender - Cyberpunk Gaming Dashboard",
   "icon": "logo_ondics.png",
   "brandingCSS": "",
-  "brandingCSSFile": "./assets/branding.css",
+  "brandingCSSFile": "../assets/branding.css",
   "beschreibung": [
     "Der QuestKalender bringt städtische und regionale Gaming-Events direkt auf dein Dashboard.",
     "Finde aktive Quests (Events) im Quest Log, plane deine Strategie mit der Tactical Map, checke Mitspieler in der Co-Op Lobby und verfolge Statistiken im Leaderboard.",
@@ -43,7 +43,7 @@
   "karteZoom": "12",
   "proxyAktiv": "nein",
   "sprache": "de",
-  "datenStand": "Stand: 2026-07-03",
+  "datenStand": "Stand: 2026-07-30",
   "weiterfuehrendeLinks": "<ul><li><a href=\"https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f\" target=\"_blank\" rel=\"noopener\">Datenquelle auf CKAN</a></li><li><a href=\"https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f/resource/630c8c4b-a530-4880-becf-ac0b84ea922b\" target=\"_blank\" rel=\"noopener\">CSV-Ressource</a></li></ul>",
   "datenquelleHinweis": "<p>Die Veranstaltungsdaten werden aus verschiedenen Quellformaten (CKAN datastore_search, CSV, ICS) automatisch erkannt und normalisiert. Die KPI-Berechnung basiert auf dem aktuellen Browser-Datum; die Seltenheits-Klassifizierung erfolgt anhand der Event-Häufigkeit im Datensatz.</p>",
   "kpiKontext1": "Anzahl der Veranstaltungen, die heute stattfinden oder bereits laufen. Zeigt, wie viel im Kalender gerade los ist.",

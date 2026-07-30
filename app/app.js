@@ -585,7 +585,11 @@ function app(configdata = {}, enclosingHtmlDivElement) {
       if (ev.ort_lon !== undefined && ev.ort_lon !== null) lon = Number(ev.ort_lon);
 
       return {
-        event_id: ev.event_id || ev.id || index + 1,
+        // Bewusst als String vereinheitlicht: Die drei Quellformate liefern
+        // unterschiedliche Typen (CSV -> "1", CKAN/JSON -> 1, ICS -> "1"). Ohne diese
+        // Normalisierung schlaegt der Lookup im Quest Log fehl, weil dort ueber
+        // data-id (immer String) gesucht wird.
+        event_id: String(ev.event_id || ev.id || index + 1),
         titel: ev.titel || ev.titel_de || ev.summary || ev.title || "Unnamed Quest Campaign",
         beschreibung: ev.beschreibung || ev.description || "",
         datum_start: ev.datum_start || ev.dtstart || ev.start || "",
@@ -1068,8 +1072,8 @@ function app(configdata = {}, enclosingHtmlDivElement) {
       item.addEventListener("click", () => {
         getAudioContext();
         playSelectSound();
-        const id = Number(item.getAttribute("data-id"));
-        const ev = filteredEvents.find(e => e.event_id === id);
+        const id = item.getAttribute("data-id");
+        const ev = filteredEvents.find(e => String(e.event_id) === id);
         selectEvent(ev);
         listDiv.querySelectorAll(".quest-item").forEach(i => {
           i.classList.remove("active");

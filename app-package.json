@@ -3,7 +3,7 @@
   "app-entwickler-name": "ondics-gmbh",
   "name-in-url": "questkalender",
   "name": "QuestKalender (z.B. für Gaming-Events)",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/odas-app-icon.svg",
   "kurzbeschreibung": "Der ultimative Event-Hub für Gamer. Finde LAN-Partys, Esports-Turniere, Cosplay-Treffen und Tabletop-Quests in deiner Nähe mit XP-Statistiken, Live-Map und iCal-Export.",
@@ -43,7 +43,7 @@
   "daten": {
     "beschreibung": "Die App verarbeitet Quest- und Veranstaltungskalender-Daten. Jedes Event muss mindestens ein Startdatum, einen Titel und eine ID besitzen. Optionale Felder umfassen Ortsangaben mit Geokoordinaten, Teilnehmer, Kategorien und Wiederholungsregeln.",
     "schema": "assets/schema.json",
-    "beispiel": "assets/events-mock.json",
+    "beispiel": "assets/events.csv",
     "beispiel-url": "https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f/resource/630c8c4b-a530-4880-becf-ac0b84ea922b/download/events.csv"
   },
   "branding-css": "assets/branding.css",
@@ -241,7 +241,7 @@
         "typ": "string",
         "laenge": 50
       },
-      "default": "Stand: 2026-07-03",
+      "default": "Stand: 2026-07-30",
       "erforderlich": "nein"
     },
     "weiterfuehrendeLinks": {
