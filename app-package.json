@@ -3,7 +3,7 @@
   "app-entwickler-name": "ondics-gmbh",
   "name-in-url": "questkalender",
   "name": "QuestKalender (z.B. für Gaming-Events)",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/odas-app-icon.svg",
   "kurzbeschreibung": "Der ultimative Event-Hub für Gamer. Finde LAN-Partys, Esports-Turniere, Cosplay-Treffen und Tabletop-Quests in deiner Nähe mit XP-Statistiken, Live-Map und iCal-Export.",
@@ -53,16 +53,6 @@
       "label": "Seitentitel",
       "hilfe": "Der Seitentitel wird im Browser-Tab der App angezeigt",
       "default": "QuestKalender - Gamer Event Hub",
-      "format": {
-        "typ": "string",
-        "laenge": 50
-      },
-      "erforderlich": "ja"
-    },
-    "lizenz": {
-      "label": "Lizenz",
-      "hilfe": "Angabe der Lizenz, die für die Nutzung der App gilt.",
-      "default": "Open Software License (OSL)",
       "format": {
         "typ": "string",
         "laenge": 50
@@ -163,6 +153,16 @@
       "default": "(C) Copyright 2026 | QuestKalender | App-Entwickler: Ondics GmbH",
       "erforderlich": "ja"
     },
+    "urlDaten": {
+      "label": "URL zum Datensatz im ODP",
+      "hilfe": "Der Datensatz im Open Data Portal mit den Quest- und Event-Daten",
+      "format": {
+        "typ": "url"
+      },
+      "default": "https://open-data-esslingen.de/dataset/questkalender",
+      "beispiel": "https://open-data-esslingen.de/dataset/questkalender",
+      "erforderlich": "ja"
+    },
     "apiurl": {
       "label": "URL zu den Daten",
       "hilfe": "Basis-URL des CKAN-Endpunkts (z. B. datastore_search)",
@@ -256,12 +256,12 @@
     "sprache": {
       "label": "Sprache der App",
       "hilfe": "Angabe der App-Sprache",
+      "default": "de",
       "format": {
         "typ": "dropdown",
         "optionen": [
           "de"
-        ],
-        "default": "de"
+        ]
       },
       "erforderlich": "ja"
     },
@@ -322,6 +322,26 @@
         "laenge": 250
       },
       "default": "Anzahl der verschiedenen Veranstalter und Organisationen. Spricht für ein breites und aktives Netzwerk.",
+      "erforderlich": "nein"
+    },
+    "brandingCSS": {
+      "label": "Zusätzliches Branding-CSS",
+      "hilfe": "Optionaler CSS-Code für die konkrete App-Instanz.",
+      "default": "",
+      "format": {
+        "typ": "string",
+        "laenge": 10000
+      },
+      "erforderlich": "nein"
+    },
+    "brandingCSSFile": {
+      "label": "Branding-CSS-Datei",
+      "hilfe": "Optionale URL zu einer zusätzlichen CSS-Datei für die konkrete App-Instanz.",
+      "default": "",
+      "format": {
+        "typ": "url",
+        "laenge": 500
+      },
       "erforderlich": "nein"
     }
   }

@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.7.0 - 2026-07-31
+- CHG: toter Konfigurationsschlüssel lizenz entfernt (F-17)
+- CHG: brandingCSS und brandingCSSFile als Base-Abhängigkeiten deklariert und lokal gespiegelt (F-17)
+- CHG: Groß-/Kleinschreibung der Config-Schlüssel vereinheitlicht, Fallback-Ketten entfernt (F-17)
+- CHG: urlDaten deklariert; der Schlüssel war bisher nur lokal vorhanden (F-17)
+- CHG: dropdown-Default auf Feldebene verschoben statt in format (F-18)
+- CHG: assets/schema.json auf ein flaches Frictionless Table Schema gebracht (F-20)
+
 ## 1.6.0 - 2026-07-30
 
 - **ENH:** Referenzdatensatz `assets/events.csv` neu erstellt (20 Termine, rollierend um den 30.07.2026). Der bisherige Bestand lag vollständig in der Vergangenheit (15.05.–31.05.2026), wodurch sämtliche Kennzahlen der Startseite auf null standen und der Kalender leer blieb
