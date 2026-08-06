@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.13.0 - 2026-08-06
+- FIX: Base auf Template oda-generic 1.6.0 vereinheitlicht (Hook renderPageOverride)
+
 ## 1.12.0 - 2026-08-06
 - FIX: toter Mock-Fallback entfernt (F-13-Nachzug); die konfigurierte Datenquelle ist jetzt maßgeblich — `loadAllData()` unterscheidet drei Datenzustände: keine Quelle konfiguriert, Quelle nicht erreichbar und Quelle erreichbar aber leer. Die Mock-Datei ist aus dem Lieferumfang entfernt
 
