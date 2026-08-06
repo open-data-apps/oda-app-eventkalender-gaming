@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.12.0 - 2026-08-06
+- FIX: toter Mock-Fallback entfernt (F-13-Nachzug); die konfigurierte Datenquelle ist jetzt maßgeblich — `loadAllData()` unterscheidet drei Datenzustände: keine Quelle konfiguriert, Quelle nicht erreichbar und Quelle erreichbar aber leer. Die Mock-Datei ist aus dem Lieferumfang entfernt
+
 ## 1.11.0 - 2026-08-04
 - FIX: Datenschutzhinweis "Beim Aufruf kontaktierte Drittanbieter" an das Vendoring angepasst — jetzt lokal ausgelieferte Bibliotheken (Bootstrap/Leaflet/Chart.js) sind aus der Liste entfernt, weiterhin extern geladene Dienste (Kartenkacheln, Zusatzbibliotheken) bleiben genannt
 

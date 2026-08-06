@@ -477,75 +477,32 @@ function app(configdata = {}, enclosingHtmlDivElement) {
 
   async function loadAllData() {
     showLoading();
-    let rawContent = "";
-    let isFallbackNeeded = false;
 
-    // Check if the config url is empty or if we are using the default schema resource ID
-    if (!API_URL || RESOURCE_ID === "36aa580e-0c46-4f76-bc95-fbba9a5c5fa3") {
-      console.log("Standard-Ressourcen-ID (Schema) oder leere API-URL erkannt. Verwende Mock-Daten.");
-      isFallbackNeeded = true;
+    if (!API_URL) {
+      const error = new Error("Keine Datenquelle konfiguriert.");
+      console.error("Fehler beim Laden der Veranstaltungsdaten:", error);
+      showError("Die Veranstaltungsdatenquelle ist nicht konfiguriert.");
+      return;
     }
 
-    if (!isFallbackNeeded) {
-      try {
-        let fetchUrl = API_URL;
-        if (RESOURCE_ID && !API_URL.endsWith(".json")) {
-          fetchUrl += `?resource_id=${encodeURIComponent(RESOURCE_ID)}&limit=${MAX_RECORDS}`;
-        }
-
-        // Relative Pfade liegen im eigenen Origin und brauchen nie den Proxy.
-        const istRelativ =
-          API_URL.startsWith("../") || API_URL.startsWith("./");
-        rawContent = await fetchOdasResource(
-          fetchUrl,
-          istRelativ ? {} : configdata,
-        );
-
-        parseAndNormalize(rawContent);
-
-        if (allEvents.length === 0) {
-          console.log("Keine Events im Datensatz gefunden. Verwende Mock-Daten.");
-          isFallbackNeeded = true;
-        }
-      } catch (err) {
-        console.error("Fehler beim Laden der Veranstaltungsdaten:", err);
-        isFallbackNeeded = true;
+    try {
+      let fetchUrl = API_URL;
+      if (RESOURCE_ID && !API_URL.endsWith(".json")) {
+        fetchUrl += `?resource_id=${encodeURIComponent(RESOURCE_ID)}&limit=${MAX_RECORDS}`;
       }
-    }
 
-    if (isFallbackNeeded) {
-      try {
-        console.log("Lade lokale Mock-Daten aus assets/events-mock.json...");
-        const isLocal = typeof window !== "undefined" && 
-          ["127.0.0.1", "localhost", "::1"].includes(window.location.hostname);
-        
-        let response;
-        if (isLocal) {
-          console.log("Lokal: Versuche ../assets/events-mock.json");
-          response = await fetch("../assets/events-mock.json");
-        } else {
-          console.log("Produktion: Versuche assets/events-mock.json");
-          response = await fetch("assets/events-mock.json");
-        }
+      // Relative Pfade liegen im eigenen Origin und brauchen nie den Proxy.
+      const istRelativ =
+        API_URL.startsWith("../") || API_URL.startsWith("./");
+      const rawContent = await fetchOdasResource(
+        fetchUrl,
+        istRelativ ? {} : configdata,
+      );
 
-        const contentType = response.headers.get("content-type") || "";
-        if (!response.ok || contentType.includes("text/html")) {
-          const fallbackPath = isLocal ? "assets/events-mock.json" : "../assets/events-mock.json";
-          console.log(`Pfad fehlgeschlagen oder HTML-Antwort. Versuche Fallback-Pfad: ${fallbackPath}`);
-          response = await fetch(fallbackPath);
-        }
-
-        const finalContentType = response.headers.get("content-type") || "";
-        if (!response.ok || finalContentType.includes("text/html")) {
-          throw new Error(`HTTP ${response.status} oder unerwarteter Inhalt (HTML-Fallback)`);
-        }
-
-        rawContent = await response.text();
-        parseAndNormalize(rawContent);
-      } catch (fallbackErr) {
-        console.error("Konnte Mock-Daten nicht laden:", fallbackErr);
-        showError(`Die Daten konnten nicht geladen werden und der Fallback ist fehlgeschlagen.`);
-      }
+      parseAndNormalize(rawContent);
+    } catch (err) {
+      console.error("Fehler beim Laden der Veranstaltungsdaten:", err);
+      showError("Die Veranstaltungsdaten konnten nicht geladen werden. Bitte prüfen Sie die Datenquelle.");
     }
   }
 
