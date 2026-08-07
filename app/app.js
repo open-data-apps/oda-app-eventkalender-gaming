@@ -3,6 +3,8 @@
  * (C) Ondics GmbH / ODAS Gaming Edition, 2026
  */
 
+let qkInstanzZaehler = 0;
+
 function isOdasProxyEnabled(configdata = {}) {
   return String(configdata.proxyAktiv || "").trim().toLowerCase() === "ja";
 }
@@ -82,6 +84,7 @@ async function fetchOdasJson(targetUrl, configdata = {}) {
 }
 
 function app(configdata = {}, enclosingHtmlDivElement) {
+  const qkUid = "i" + ++qkInstanzZaehler;
   // 1. CONFIGURATION
   const API_URL = configdata.apiurl || "";
   const RESOURCE_ID = configdata.resourceId || "";
@@ -1224,7 +1227,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
         const events = participantMap.get(name);
         events.sort((a, b) => new Date(a.datum_start) - new Date(b.datum_start));
 
-        const collapsibleId = `att-coll-${name.replace(/[^a-zA-Z0-9]/g, "")}`;
+        const collapsibleId = `att-coll-${name.replace(/[^a-zA-Z0-9]/g, "")}-${qkUid}`;
 
         return `
           <div class="border rounded p-2 mb-2" style="background: var(--event-bg-card); border-color: var(--event-border) !important;">
@@ -1825,7 +1828,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
   function kpiContext(kontext, id) {
     var text = String(kontext || "").trim();
     if (!text) return "";
-    var targetId = "qk-kpi-kontext-" + id;
+    var targetId = "qk-kpi-kontext-" + id + "-" + qkUid;
     return (
       '<button class="qk-kpi-info-toggle collapsed" type="button" ' +
       'data-bs-toggle="collapse" data-bs-target="#' + targetId + '" ' +
@@ -1850,12 +1853,12 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     return (
       '<section class="qk-methodik mt-3">' +
       '<button class="qk-methodik-toggle collapsed" type="button" ' +
-      'data-bs-toggle="collapse" data-bs-target="#qk-methodik-body" ' +
-      'aria-expanded="false" aria-controls="qk-methodik-body">' +
+      'data-bs-toggle="collapse" data-bs-target="#qk-methodik-body-' + qkUid + '" ' +
+      'aria-expanded="false" aria-controls="qk-methodik-body-' + qkUid + '">' +
       '<h2 class="h5 mb-0">Methodik &amp; Datenquelle</h2>' +
       '<span class="qk-methodik-chevron" aria-hidden="true">&#9662;</span>' +
       "</button>" +
-      '<div id="qk-methodik-body" class="collapse">' +
+      '<div id="qk-methodik-body-' + qkUid + '" class="collapse">' +
       '<div class="qk-methodik-content">' +
       standHtml +
       hinweis +
@@ -1868,7 +1871,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
   function kpiContext(kontext, id) {
     var text = String(kontext || "").trim();
     if (!text) return "";
-    var targetId = "qk-kpi-kontext-" + id;
+    var targetId = "qk-kpi-kontext-" + id + "-" + qkUid;
     return (
       '<button class="qk-kpi-info-toggle collapsed" type="button" ' +
       'data-bs-toggle="collapse" data-bs-target="#' + targetId + '" ' +
