@@ -122,7 +122,10 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     q: ""
   };
 
-  const rootId = `eventkalender-${Date.now()}`;
+  // Instanzkennung: qkUid ("i" + N) und rootId ("eventkalender-" + N)
+  // teilen sich denselben Zählerstand N aus ++qkInstanzZaehler — damit sind
+  // beide IDs je Instanz monoton eindeutig und bleiben über Renders stabil.
+  const rootId = "eventkalender-" + qkInstanzZaehler;
 
   // 3. AUDIO SYSTEM (Web Audio API)
   let audioCtx = null;
