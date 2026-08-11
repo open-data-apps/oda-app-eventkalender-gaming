@@ -986,14 +986,15 @@ function app(configdata = {}, enclosingHtmlDivElement) {
 
       const rarity = getRarity(ev.kategorie);
       const isSelected = selectedEvent && selectedEvent.event_id === ev.event_id;
-      const isCancelled = ev.status === "abgesagt";
+    const isCancelled = ev.status === "abgesagt";
+    const u = safeHttpUrl(ev.url);
       const isRecurring = ev.wiederholung ? "🔄" : "";
       
       const timeStr = formatEventTimeRange(ev.datum_start, ev.datum_ende);
       const activeStyle = isSelected ? 'border-color: var(--event-primary) !important; box-shadow: 0 0 15px rgba(0, 240, 255, 0.4) !important;' : '';
 
       html += `
-        <div class="quest-item rarity-${rarity.id} ${isSelected ? "active" : ""}" data-id="${ev.event_id}" style="cursor: pointer; ${activeStyle}">
+        <div class="quest-item rarity-${rarity.id} ${isSelected ? "active" : ""}" data-id="${escapeHtml(ev.event_id)}" style="cursor: pointer; ${activeStyle}">
           <span class="quest-rarity-tag">${rarity.label}</span>
           <div class="quest-title fw-bold ${isCancelled ? "event-cancelled text-decoration-line-through text-muted" : ""}">
             ${escapeHtml(ev.titel)}
@@ -1144,7 +1145,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
               <div class="small text-muted" style="margin-bottom:2px; font-weight:600;">📅 ${timeStr}</div>
               <div class="small text-muted" style="margin-bottom:5px; font-weight:600;">📍 ${escapeHtml(ev.ort_name)}</div>
               ${ev.teilnehmer ? `<div class="small text-truncate text-white-50" style="margin-bottom:6px; font-weight:600;">👥 Parties: ${escapeHtml(ev.teilnehmer.split(';').join(', '))}</div>` : ""}
-              <button class="btn btn-xs btn-event w-100 py-1 text-center" style="font-size:0.75rem; border-radius:4px; font-family:'Orbitron', sans-serif;" id="${rootId}-map-btn-show-${ev.event_id}">
+              <button class="btn btn-xs btn-event w-100 py-1 text-center" style="font-size:0.75rem; border-radius:4px; font-family:'Orbitron', sans-serif;" id="${rootId}-map-btn-show-${escapeHtml(ev.event_id)}">
                 Lock Target
               </button>
             </div>
@@ -1156,7 +1157,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
           marker.on("popupopen", () => {
             getAudioContext();
             playSelectSound();
-            const btn = document.getElementById(`${rootId}-map-btn-show-${ev.event_id}`);
+            const btn = document.getElementById(`${rootId}-map-btn-show-${escapeHtml(ev.event_id)}`);
             if (btn) {
               btn.addEventListener("click", () => {
                 getAudioContext();
@@ -1246,7 +1247,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
                   return `
                     <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center border-0 py-2 px-1 rounded text-white" 
                          style="background: transparent; cursor:pointer; font-size:0.85rem;" 
-                         id="att-ev-link-${ev.event_id}">
+                         id="att-ev-link-${escapeHtml(ev.event_id)}">
                       <div>
                         <span class="badge me-2" style="background: ${rarity.color}; font-size:0.65rem; text-transform:uppercase;">
                           ${rarity.label}
@@ -1270,7 +1271,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
       filteredList.forEach(name => {
         const events = participantMap.get(name);
         events.forEach(ev => {
-          const item = resultDiv.querySelector(`#att-ev-link-${ev.event_id}`);
+          const item = resultDiv.querySelector(`#att-ev-link-${escapeHtml(ev.event_id)}`);
           if (item) {
             item.addEventListener("click", (e) => {
               getAudioContext();
@@ -1514,9 +1515,9 @@ function app(configdata = {}, enclosingHtmlDivElement) {
           </div>
         ` : ""}
 
-        ${ev.url ? `
+        ${u ? `
           <div class="mt-3">
-            <a href="${escapeHtml(ev.url)}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-event w-100 py-2">
+            <a href="${escapeHtml(u)}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-event w-100 py-2">
               🔗 Guild Board Details &rarr;
             </a>
           </div>
@@ -1911,4 +1912,9 @@ function app(configdata = {}, enclosingHtmlDivElement) {
 // ═══════════════════════════════════════════
 function addToHead() {
   return;
+}
+
+function safeHttpUrl(value) {
+  const s = String(value || "").trim();
+  return /^https?:\/\//i.test(s) ? s : "";
 }

@@ -140,8 +140,9 @@ ausgeliefert.
 Beim Aufruf dieser App werden folgende externe Server kontaktiert:
 
 - `tile.openstreetmap.org` — Kartenkacheln (OpenStreetMap)
+- `fonts.googleapis.com` — Google Fonts (Orbitron, Rajdhani); übertragen: IP-Adresse, User-Agent, angeforderte Fonts; wird direkt vor dem ersten Abruf geladen.
 
-Diese Anbieter bleiben auch im Standalone-Betrieb extern; ein vollständig autarker Betrieb ohne Internetzugang ist derzeit nicht möglich. Alle Programmbibliotheken werden lokal aus `app/vendor/` ausgeliefert und nicht mehr extern geladen.
+Diese Anbieter bleiben auch im Standalone-Betrieb extern; ein vollständig autarker Betrieb ohne Internetzugang ist derzeit nicht möglich. Programmbibliotheken werden lokal aus `app/vendor/` ausgeliefert; die Schriftarten werden von Google Fonts geladen.
 
 ### Auslieferung an den ODAS
 
