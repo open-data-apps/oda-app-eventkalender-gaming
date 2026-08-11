@@ -5,6 +5,14 @@
 
 let qkInstanzZaehler = 0;
 
+// F-43: Registrierte Instanzen (Container -> Runtime), damit der Top-Level-Hook
+// onPageLeave() alle gemounteten Instanzen aufraeumen kann. Die Base ruft den
+// Hook global ohne Container-Parameter auf; eine iterierbare Map ist daher das
+// zur App passende Muster (schulwegsicherheit-Portfoliomuster). Die Runtime
+// haelt eine dispose()-Funktion, die auf die Closure-Variablen der Instanz
+// (leafletMap, chartInstanceBar, chartInstanceDoughnut, audioCtx) zugreifen kann.
+const questKalenderInstances = new Map();
+
 function isOdasProxyEnabled(configdata = {}) {
   return String(configdata.proxyAktiv || "").trim().toLowerCase() === "ja";
 }
@@ -83,6 +91,21 @@ async function fetchOdasJson(targetUrl, configdata = {}) {
   return JSON.parse(await fetchOdasResource(targetUrl, configdata));
 }
 
+/*
+ * Template-Hook (oda-generic 1.4.0). Die Base ruft ihn vor dem Rendern der neuen
+ * Seite auf. Diese App haelt eine Leaflet-Karte, zwei Chart.js-Instanzen und
+ * einen AudioContext in der Instanz-Closure; der Hook raeumt alle gemounteten
+ * Instanzen ueber die registrierte dispose()-Funktion ab und macht späte
+ * Async-Renders (nach loadLeaflet()/loadChartJS()/fetchOdasResource) durch das
+ * disposed-Flag wirkungslos. Der soundMuted-Zustand bleibt instanzlokal.
+ */
+function onPageLeave(page) {
+  questKalenderInstances.forEach((runtime, container) => {
+    runtime.dispose();
+    questKalenderInstances.delete(container);
+  });
+}
+
 function app(configdata = {}, enclosingHtmlDivElement) {
   const qkUid = "i" + ++qkInstanzZaehler;
   // 1. CONFIGURATION
@@ -126,6 +149,48 @@ function app(configdata = {}, enclosingHtmlDivElement) {
   // teilen sich denselben Zählerstand N aus ++qkInstanzZaehler — damit sind
   // beide IDs je Instanz monoton eindeutig und bleiben über Renders stabil.
   const rootId = "eventkalender-" + qkInstanzZaehler;
+
+  let disposed = false;
+
+  const runtime = {
+    dispose() {
+      disposed = true;
+      if (leafletMap) {
+        try {
+          leafletMap.remove();
+        } catch (error) {
+          console.warn("Fehler beim Entfernen der Leaflet-Karte:", error);
+        }
+        leafletMap = null;
+        markerLayer = null;
+      }
+      if (chartInstanceBar) {
+        try {
+          chartInstanceBar.destroy();
+        } catch (error) {
+          console.warn("Fehler beim Zerstören des Balkendiagramms:", error);
+        }
+        chartInstanceBar = null;
+      }
+      if (chartInstanceDoughnut) {
+        try {
+          chartInstanceDoughnut.destroy();
+        } catch (error) {
+          console.warn("Fehler beim Zerstören des Kreisdiagramms:", error);
+        }
+        chartInstanceDoughnut = null;
+      }
+      if (audioCtx) {
+        try {
+          audioCtx.close();
+        } catch (error) {
+          console.warn("Fehler beim Schließen des AudioContext:", error);
+        }
+        audioCtx = null;
+      }
+    },
+  };
+  questKalenderInstances.set(enclosingHtmlDivElement, runtime);
 
   // 3. AUDIO SYSTEM (Web Audio API)
   let audioCtx = null;
@@ -504,9 +569,11 @@ function app(configdata = {}, enclosingHtmlDivElement) {
         fetchUrl,
         istRelativ ? {} : configdata,
       );
+      if (disposed) return;
 
       parseAndNormalize(rawContent);
     } catch (err) {
+      if (disposed) return;
       console.error("Fehler beim Laden der Veranstaltungsdaten:", err);
       showError("Die Veranstaltungsdaten konnten nicht geladen werden. Bitte prüfen Sie die Datenquelle.");
     }
@@ -1072,6 +1139,16 @@ function app(configdata = {}, enclosingHtmlDivElement) {
 
   // 12. TAB 2: TACTICAL MAP (Karte)
   function renderKarte(container) {
+    // F-43: Beim Re-Render des Karte-Tabs ersetzt `container.innerHTML` das
+    // bisherige Map-Element. Die alte Leaflet-Instanz muss vorher entfernt
+    // werden, sonst bleibt sie mit Event-Listenern und Tile-Requests aktiv
+    // (Ressourcen-Leak; Leaflet-Maps haengen nicht am DOM-Node).
+    if (leafletMap) {
+      leafletMap.remove();
+      leafletMap = null;
+      markerLayer = null;
+    }
+
     container.innerHTML = `
       <div class="map-card">
         <div id="${rootId}-map-canvas" style="height: 520px; width: 100%; background: var(--event-bg-dark);"></div>
@@ -1086,6 +1163,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     `;
 
     loadLeaflet(() => {
+      if (disposed) return;
       const mapDiv = document.getElementById(`${rootId}-map-canvas`);
       if (!mapDiv || !window.L) return;
 
@@ -1315,6 +1393,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     `;
 
     loadChartJS(() => {
+      if (disposed) return;
       const barCanvas = document.getElementById(`${rootId}-chart-bar`);
       const doughnutCanvas = document.getElementById(`${rootId}-chart-doughnut`);
       if (!barCanvas || !doughnutCanvas || !window.Chart) return;
