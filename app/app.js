@@ -987,7 +987,6 @@ function app(configdata = {}, enclosingHtmlDivElement) {
       const rarity = getRarity(ev.kategorie);
       const isSelected = selectedEvent && selectedEvent.event_id === ev.event_id;
     const isCancelled = ev.status === "abgesagt";
-    const u = safeHttpUrl(ev.url);
       const isRecurring = ev.wiederholung ? "🔄" : "";
       
       const timeStr = formatEventTimeRange(ev.datum_start, ev.datum_ende);
@@ -1440,6 +1439,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     const timeRangeStr = formatEventTimeRange(ev.datum_start, ev.datum_ende);
     const attendees = ev.teilnehmer ? ev.teilnehmer.split(";").map(t => t.trim()).filter(Boolean) : [];
     const isCancelled = ev.status === "abgesagt";
+    const u = safeHttpUrl(ev.url);
 
     panel.innerHTML = `
       <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2" style="border-color: var(--event-border) !important;">
@@ -1488,7 +1488,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
           <div>
             <strong class="text-white d-block">Quest Giver (Guild):</strong>
             <span class="text-muted">${escapeHtml(ev.veranstalter)}</span>
-            ${ev.kontakt_email ? `<div class="mt-1 small"><a href="mailto:${escapeHtml(ev.kontakt_email)}" style="color:var(--event-primary); text-decoration:none;">✉️ ${escapeHtml(ev.kontakt_email)}</a></div>` : ""}
+            ${ev.kontakt_email ? `<div class="mt-1 small">✉️ ${escapeHtml(ev.kontakt_email)}</div>` : ""}
           </div>
         </div>
 
