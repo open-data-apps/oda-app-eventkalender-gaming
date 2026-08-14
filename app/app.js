@@ -549,10 +549,13 @@ function app(configdata = {}, enclosingHtmlDivElement) {
   async function loadAllData() {
     showLoading();
 
-    if (!API_URL) {
-      const error = new Error("Keine Datenquelle konfiguriert.");
-      console.error("Fehler beim Laden der Veranstaltungsdaten:", error);
-      showError("Die Veranstaltungsdatenquelle ist nicht konfiguriert.");
+    const quelle = String(API_URL || "").trim();
+    if (!quelle || /^\{\{.*\}\}$/.test(quelle) || /^<.*>$/.test(quelle)) {
+      const container = document.getElementById(`${rootId}-tab-content`);
+      if (container) {
+        container.innerHTML =
+          '<div class="alert alert-info m-3" role="alert">Es ist keine Datenquelle konfiguriert.</div>';
+      }
       return;
     }
 
