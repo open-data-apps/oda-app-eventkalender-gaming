@@ -3,7 +3,7 @@
   "app-entwickler-name": "ondics-gmbh",
   "name-in-url": "questkalender",
   "name": "QuestKalender (z.B. für Gaming-Events)",
-  "version": "1.25.0",
+  "version": "1.26.0",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/odas-app-icon.svg",
   "kurzbeschreibung": "Der ultimative Event-Hub für Gamer. Finde LAN-Partys, Esports-Turniere, Cosplay-Treffen und Tabletop-Quests in deiner Nähe mit XP-Statistiken, Live-Map und iCal-Export.",
@@ -170,8 +170,8 @@
       "format": {
         "typ": "url"
       },
-      "default": "https://open-data-esslingen.de/dataset/questkalender",
-      "beispiel": "https://open-data-esslingen.de/dataset/questkalender",
+      "default": "https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f",
+      "beispiel": "https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f",
       "erforderlich": "ja"
     },
     "apiurl": {
