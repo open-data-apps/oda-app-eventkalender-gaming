@@ -153,6 +153,8 @@ function app(configdata = {}, enclosingHtmlDivElement) {
   let markerLayer = null;
   let chartInstanceBar = null;
   let chartInstanceDoughnut = null;
+  let discardedRecordsCount = 0; // F-73: kaputte CSV-Zeilen + fehlendes datum_start
+  let totalParsedRecordsCount = 0;
 
   let filters = {
     von: "",
@@ -309,6 +311,16 @@ function app(configdata = {}, enclosingHtmlDivElement) {
       .replace(/'/g, "&#039;");
   }
 
+  // Helper: Build a DOM-id-safe token from an event_id (F-81).
+  // escapeHtml() is the wrong tool for id-building: the browser decodes HTML
+  // entities while parsing innerHTML, so an id built with escapeHtml() ends up
+  // containing the raw (unescaped) event_id in the DOM, while a later
+  // getElementById() lookup using the escaped string no longer matches.
+  // Same alnum-filter style as the existing `collapsibleId` pattern.
+  function sanitizeIdPart(str) {
+    return String(str === null || str === undefined ? "" : str).replace(/[^a-zA-Z0-9]/g, "");
+  }
+
   // Helper: Resolve CSS variable colors to absolute values for Canvas
   function resolveCssColor(cssVar) {
     if (!cssVar) return "#8b9bb4";
@@ -344,7 +356,9 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     enclosingHtmlDivElement.innerHTML = `
       <div class="event-container" id="${rootId}">
         <div class="text-end mb-2"><small id="qk-datenstand" class="text-muted">${configdata.datenStand ? escapeHtml(configdata.datenStand) : ''}</small></div>
-        
+
+        <div id="${rootId}-data-warnings"></div>
+
         <!-- Header Actions -->
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2 event-header">
           <div>
@@ -603,7 +617,8 @@ function app(configdata = {}, enclosingHtmlDivElement) {
   // Parses CSV, JSON or ICS/iCal and normalizes the format
   function parseAndNormalize(content) {
     let parsedData = [];
-    
+    let brokenCsvRows = 0; // F-73: kaputte CSV-Zeilen (zu wenige Felder)
+
     if (content && typeof content === "string" && content.includes("BEGIN:VCALENDAR")) {
       console.log("iCalendar-Format (ICS) erkannt, parse...");
       parsedData = parseICS(content);
@@ -623,12 +638,14 @@ function app(configdata = {}, enclosingHtmlDivElement) {
       } catch (err) {
         // JSON failed, try CSV parser
         console.log("JSON parsing fehlgeschlagen, versuche CSV...");
-        parsedData = parseCSV(content);
+        const csvResult = parseCSV(content);
+        parsedData = csvResult.rows;
+        brokenCsvRows = csvResult.skipped;
       }
     }
 
     // Normalize records to match concept keys
-    allEvents = parsedData.map((ev, index) => {
+    const normalized = parsedData.map((ev, index) => {
       // Extract coordinates
       let lat = null;
       let lon = null;
@@ -658,7 +675,16 @@ function app(configdata = {}, enclosingHtmlDivElement) {
         status: ev.status || "geplant",
         wiederholung: ev.wiederholung || ev.rrule || ""
       };
-    }).filter(ev => ev.datum_start); // Skip events missing start date
+    });
+
+    allEvents = normalized.filter(ev => ev.datum_start); // Skip events missing start date
+    const missingStartDate = normalized.length - allEvents.length;
+
+    // F-73: verworfene Datensaetze zaehlen und melden statt still zu verwerfen.
+    // totalParsedRecordsCount = alle Rohdatensaetze inkl. kaputter CSV-Zeilen.
+    totalParsedRecordsCount = parsedData.length + brokenCsvRows;
+    discardedRecordsCount = brokenCsvRows + missingStartDate;
+    renderDataWarnings();
 
     // Populate filter selectors dynamically
     populateFiltersDynamicOptions();
@@ -667,10 +693,12 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     applyFilters();
   }
 
+  // Liefert { rows, skipped } - Zeilen mit weniger Feldern als Header (kaputte
+  // CSV-Zeile) werden verworfen und gezaehlt statt still ignoriert (F-73).
   function parseCSV(text) {
     const lines = text.split(/\r?\n/).filter(line => line.trim());
-    if (lines.length === 0) return [];
-    
+    if (lines.length === 0) return { rows: [], skipped: 0 };
+
     // Detect delimiter
     const header = lines[0];
     let delimiter = ",";
@@ -681,17 +709,21 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     const headers = splitCSVLine(header, delimiter).map(h => h.trim().toLowerCase());
 
     const result = [];
+    let skipped = 0;
     for (let i = 1; i < lines.length; i++) {
       const values = splitCSVLine(lines[i], delimiter);
-      if (values.length < headers.length) continue;
-      
+      if (values.length < headers.length) {
+        skipped++;
+        continue;
+      }
+
       const obj = {};
       headers.forEach((headerName, index) => {
         obj[headerName] = values[index];
       });
       result.push(obj);
     }
-    return result;
+    return { rows: result, skipped };
   }
 
   function splitCSVLine(line, delimiter) {
@@ -844,6 +876,82 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     return icsDateStr;
   }
 
+  // F-82: Wandelt einen naiven "YYYY-MM-DD[THH:mm[:ss]]"-String (ohne
+  // Zeitzonen-Suffix) unter Angabe einer IANA-Zeitzone (tzid) in eine echte
+  // UTC-Instanz (Date) um. Strings mit "Z"-Suffix oder numerischem Offset
+  // (z.B. "+02:00") gelten bereits als absolut und werden direkt geparst.
+  //
+  // Ansatz (bewusst ohne zusaetzliche Library): Die Wanduhrzeit-Komponenten
+  // werden zunaechst als UTC interpretiert (grober Schaetzwert). Anschliessend
+  // wird ermittelt, wie dieser Schaetzwert in der Zielzeitzone dargestellt
+  // wuerde (via Intl.DateTimeFormat mit timeZone). Die Differenz zwischen
+  // beiden Darstellungen ist der tatsaechliche UTC-Offset der Zielzeitzone
+  // zu diesem Zeitpunkt (inkl. Sommerzeit), der vom Schaetzwert abgezogen
+  // wird, um die korrekte UTC-Instanz zu erhalten.
+  function parseEventDateTime(dateStr, tzid) {
+    if (!dateStr) return null;
+
+    // Bereits absolute Werte (Z-Suffix oder numerischer Offset) direkt parsen.
+    if (/Z$/.test(dateStr) || /[+-]\d{2}:?\d{2}$/.test(dateStr)) {
+      const abs = new Date(dateStr);
+      return isNaN(abs.getTime()) ? null : abs;
+    }
+
+    const match = /^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2})(?::(\d{2}))?)?/.exec(dateStr);
+    if (!match) {
+      const fallback = new Date(dateStr);
+      return isNaN(fallback.getTime()) ? null : fallback;
+    }
+
+    const year = Number(match[1]);
+    const month = Number(match[2]);
+    const day = Number(match[3]);
+    const hour = match[4] !== undefined ? Number(match[4]) : 0;
+    const minute = match[5] !== undefined ? Number(match[5]) : 0;
+    const second = match[6] !== undefined ? Number(match[6]) : 0;
+
+    const zone = tzid || "Europe/Berlin";
+    const guessUtcMs = Date.UTC(year, month - 1, day, hour, minute, second);
+
+    let offsetMs = 0;
+    try {
+      const dtf = new Intl.DateTimeFormat("en-US", {
+        timeZone: zone,
+        hour12: false,
+        year: "numeric", month: "2-digit", day: "2-digit",
+        hour: "2-digit", minute: "2-digit", second: "2-digit"
+      });
+      const parts = {};
+      dtf.formatToParts(new Date(guessUtcMs)).forEach(p => {
+        if (p.type !== "literal") parts[p.type] = p.value;
+      });
+      // Manche Engines liefern "24" statt "00" fuer Mitternacht bei hour12:false.
+      const hourVal = parts.hour === "24" ? 0 : Number(parts.hour);
+      const asIfUtcMs = Date.UTC(
+        Number(parts.year), Number(parts.month) - 1, Number(parts.day),
+        hourVal, Number(parts.minute), Number(parts.second)
+      );
+      offsetMs = asIfUtcMs - guessUtcMs;
+    } catch (e) {
+      // Unbekannte/ungueltige Zeitzone -> Verhalten wie zuvor (keine Verschiebung).
+      offsetMs = 0;
+    }
+
+    return new Date(guessUtcMs - offsetMs);
+  }
+
+  // F-82: Zentrale Stelle fuer die tatsaechliche UTC-Instanz von Start/Ende
+  // eines Termins unter Beruecksichtigung von ev.zeitzone. Von hier aus
+  // speisen sich KPI-Berechnung und chronologische Sortierung, damit nicht
+  // mehr an mehreren Stellen ad-hoc mit new Date(ev.datum_start) (= implizit
+  // Browser-Zeitzone) gerechnet wird.
+  function getEventStartInstant(ev) {
+    return parseEventDateTime(ev.datum_start, ev.zeitzone);
+  }
+  function getEventEndInstant(ev) {
+    return parseEventDateTime(ev.datum_ende || ev.datum_start, ev.zeitzone);
+  }
+
   function populateFiltersDynamicOptions() {
     const root = document.getElementById(rootId);
     if (!root) return;
@@ -914,19 +1022,34 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     if (!root) return;
 
     const now = new Date();
-    const todayStr = now.toISOString().substring(0, 10);
+
+    // F-82: "Heute" bezieht sich auf den Kalendertag in der Standard-Zeitzone
+    // der App (Europe/Berlin), nicht auf UTC oder die Browser-Zeitzone.
+    // Termine werden ueber ihre echte UTC-Instanz (unter Beruecksichtigung
+    // von ev.zeitzone, siehe getEventStartInstant/getEventEndInstant) mit
+    // diesem Kalendertag verglichen, statt naiv new Date(ev.datum_start) zu
+    // bilden (das die Browser-Zeitzone statt ev.zeitzone unterstellt).
+    const todayStr = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Europe/Berlin", year: "numeric", month: "2-digit", day: "2-digit"
+    }).format(now);
+    const todayStartInstant = parseEventDateTime(`${todayStr}T00:00:00`, "Europe/Berlin");
+    const todayEndInstant = parseEventDateTime(`${todayStr}T23:59:59`, "Europe/Berlin");
 
     // 1. Events today
     const eventsToday = allEvents.filter(e => {
-      const startStr = e.datum_start.substring(0, 10);
-      const endeStr = e.datum_ende.substring(0, 10);
-      return startStr === todayStr || (startStr <= todayStr && endeStr >= todayStr);
+      const start = getEventStartInstant(e);
+      if (!start) return false;
+      const end = getEventEndInstant(e) || start;
+      return start <= todayEndInstant && end >= todayStartInstant;
     });
 
     // 2. Next Event (chronological >= now)
     const futureEventsSorted = allEvents
-      .filter(e => new Date(e.datum_start) >= now && e.status !== "abgesagt")
-      .sort((a, b) => new Date(a.datum_start) - new Date(b.datum_start));
+      .filter(e => {
+        const start = getEventStartInstant(e);
+        return start && start >= now && e.status !== "abgesagt";
+      })
+      .sort((a, b) => getEventStartInstant(a) - getEventStartInstant(b));
 
     let nextEventTitle = "None Active";
     let countdownStr = "Standby";
@@ -934,8 +1057,8 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     if (futureEventsSorted.length > 0) {
       const nextEv = futureEventsSorted[0];
       nextEventTitle = nextEv.titel;
-      
-      const diffMs = new Date(nextEv.datum_start) - now;
+
+      const diffMs = getEventStartInstant(nextEv) - now;
       const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
       const diffDays = Math.floor(diffHrs / 24);
 
@@ -951,8 +1074,8 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     // 3. Events this week (next 7 days)
     const sevenDaysLater = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
     const eventsThisWeek = allEvents.filter(e => {
-      const d = new Date(e.datum_start);
-      return d >= now && d <= sevenDaysLater;
+      const d = getEventStartInstant(e);
+      return d && d >= now && d <= sevenDaysLater;
     });
 
     // 4. Unique Categories count
@@ -1037,11 +1160,14 @@ function app(configdata = {}, enclosingHtmlDivElement) {
 
   // 11. TAB 1: QUEST LOG (Ablaufplan)
   function renderAblaufplan(container) {
-    const sorted = [...filteredEvents].sort((a, b) => new Date(a.datum_start) - new Date(b.datum_start));
-    
+    // F-82: chronologische Sortierung ueber die echte UTC-Instanz (ev.zeitzone
+    // beruecksichtigt), statt new Date(ev.datum_start) implizit in der
+    // Browser-Zeitzone zu interpretieren.
+    const sorted = [...filteredEvents].sort((a, b) => getEventStartInstant(a) - getEventStartInstant(b));
+
     const now = new Date();
-    const pastEvents = sorted.filter(e => new Date(e.datum_start) < now);
-    const futureEvents = sorted.filter(e => new Date(e.datum_start) >= now);
+    const pastEvents = sorted.filter(e => getEventStartInstant(e) < now);
+    const futureEvents = sorted.filter(e => getEventStartInstant(e) >= now);
 
     const totalItems = sorted.length;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -1055,8 +1181,9 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     let placedDivider = false;
 
     paginatedEvents.forEach((ev) => {
-      const evDate = new Date(ev.datum_start);
-      
+      const evDate = getEventStartInstant(ev);
+
+
       // Place "Heute" line if transitioning from past to future
       if (!placedDivider && evDate >= now && pastEvents.length > 0) {
         html += `
@@ -1246,7 +1373,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
               <div class="small text-muted" style="margin-bottom:2px; font-weight:600;">📅 ${timeStr}</div>
               <div class="small text-muted" style="margin-bottom:5px; font-weight:600;">📍 ${escapeHtml(ev.ort_name)}</div>
               ${ev.teilnehmer ? `<div class="small text-truncate text-white-50" style="margin-bottom:6px; font-weight:600;">👥 Parties: ${escapeHtml(ev.teilnehmer.split(';').join(', '))}</div>` : ""}
-              <button class="btn btn-xs btn-event w-100 py-1 text-center" style="font-size:0.75rem; border-radius:4px; font-family:'Orbitron', sans-serif;" id="${rootId}-map-btn-show-${escapeHtml(ev.event_id)}">
+              <button class="btn btn-xs btn-event w-100 py-1 text-center" style="font-size:0.75rem; border-radius:4px; font-family:'Orbitron', sans-serif;" id="${rootId}-map-btn-show-${sanitizeIdPart(ev.event_id)}">
                 Lock Target
               </button>
             </div>
@@ -1258,7 +1385,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
           marker.on("popupopen", () => {
             getAudioContext();
             playSelectSound();
-            const btn = document.getElementById(`${rootId}-map-btn-show-${escapeHtml(ev.event_id)}`);
+            const btn = document.getElementById(`${rootId}-map-btn-show-${sanitizeIdPart(ev.event_id)}`);
             if (btn) {
               btn.addEventListener("click", () => {
                 getAudioContext();
@@ -1327,7 +1454,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
 
       resultDiv.innerHTML = filteredList.map(name => {
         const events = participantMap.get(name);
-        events.sort((a, b) => new Date(a.datum_start) - new Date(b.datum_start));
+        events.sort((a, b) => getEventStartInstant(a) - getEventStartInstant(b)); // F-82
 
         const collapsibleId = `att-coll-${name.replace(/[^a-zA-Z0-9]/g, "")}-${qkUid}`;
 
@@ -1348,7 +1475,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
                   return `
                     <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center border-0 py-2 px-1 rounded text-white" 
                          style="background: transparent; cursor:pointer; font-size:0.85rem;" 
-                         id="att-ev-link-${escapeHtml(ev.event_id)}">
+                         id="att-ev-link-${sanitizeIdPart(ev.event_id)}-${qkUid}">
                       <div>
                         <span class="badge me-2" style="background: ${rarity.color}; font-size:0.65rem; text-transform:uppercase;">
                           ${rarity.label}
@@ -1372,7 +1499,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
       filteredList.forEach(name => {
         const events = participantMap.get(name);
         events.forEach(ev => {
-          const item = resultDiv.querySelector(`#att-ev-link-${escapeHtml(ev.event_id)}`);
+          const item = resultDiv.querySelector(`#att-ev-link-${sanitizeIdPart(ev.event_id)}-${qkUid}`);
           if (item) {
             item.addEventListener("click", (e) => {
               getAudioContext();
@@ -1852,6 +1979,11 @@ function app(configdata = {}, enclosingHtmlDivElement) {
   }
 
   function showLoading() {
+    const warningsEl = document.getElementById(`${rootId}-data-warnings`);
+    if (warningsEl) warningsEl.innerHTML = "";
+    discardedRecordsCount = 0;
+    totalParsedRecordsCount = 0;
+
     const container = document.getElementById(`${rootId}-tab-content`);
     if (container) {
       container.innerHTML = `
@@ -1860,6 +1992,22 @@ function app(configdata = {}, enclosingHtmlDivElement) {
           <div>Scanning database for active campaigns...</div>
         </div>
       `;
+    }
+  }
+
+  // F-73: sichtbarer Hinweis auf verworfene Datensaetze (kaputte CSV-Zeilen
+  // oder fehlendes datum_start), statt sie kommentarlos zu verschlucken.
+  function renderDataWarnings() {
+    const el = document.getElementById(`${rootId}-data-warnings`);
+    if (!el) return;
+    if (discardedRecordsCount > 0) {
+      el.innerHTML = `
+        <div class="alert alert-info m-0 mb-2" role="alert">
+          ${discardedRecordsCount} von ${totalParsedRecordsCount} Terminen konnten nicht angezeigt werden (fehlerhafte Daten oder fehlendes Startdatum).
+        </div>
+      `;
+    } else {
+      el.innerHTML = "";
     }
   }
 
