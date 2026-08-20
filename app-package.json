@@ -3,21 +3,41 @@
   "app-entwickler-name": "ondics-gmbh",
   "name-in-url": "questkalender",
   "name": "QuestKalender (z.B. für Gaming-Events)",
-  "version": "1.27.0",
+  "version": "1.28.0",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/odas-app-icon.svg",
   "kurzbeschreibung": "Der ultimative Event-Hub für Gamer. Finde LAN-Partys, Esports-Turniere, Cosplay-Treffen und Tabletop-Quests in deiner Nähe mit XP-Statistiken, Live-Map und iCal-Export.",
   "beschreibung": [
     "_multiline_",
-    "Der QuestKalender bringt städtische und regionale Gaming-Events direkt auf dein Dashboard.",
-    "Finde aktive Quests (Events) im Quest Log, plane deine Strategie mit der Tactical Map, checke Mitspieler in der Co-Op Lobby und verfolge Statistiken im Leaderboard.",
-    "Einzelne oder alle Quests können als iCal (.ics) direkt in deinen persönlichen Kalender exportiert werden.",
-    "<h3>Für wen ist diese App?</h3>",
-    "Diese App präsentiert Veranstaltungen im Gaming-Stil. Sie richtet sich an Gaming-affine Event-Entdecker:innen, die lokale Events auf spielerische Weise erkunden möchten. Besondere Datenkenntnisse sind für die Nutzung nicht erforderlich.",
-    "<h3>Datenquelle</h3>",
-    "<ul><li><strong>Open Data Portal:</strong> <a href=\"https://open-data-musterstadt.ckan.de\" target=\"_blank\" rel=\"noopener\">open-data-musterstadt.ckan.de</a></li><li><strong>Datensatz:</strong> <a href=\"https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f\" target=\"_blank\" rel=\"noopener\">QuestKalender-Datensatz auf CKAN</a></li><li><strong>Ressource:</strong> <a href=\"https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f/resource/630c8c4b-a530-4880-becf-ac0b84ea922b\" target=\"_blank\" rel=\"noopener\">CSV-Ressource mit Veranstaltungen</a></li></ul>",
-    "<h3>Open Data App Store</h3>",
-    "Diese App ist für den Open Data App Store vorbereitet und kann von Kommunen mit eigenen Veranstaltungsdaten konfiguriert werden."
+    "Der QuestKalender (Gaming-Event-Hub) zeigt städtische und regionale Gaming-Events – LAN-Partys, Esports-Turniere, Cosplay-Treffen und Tabletop-Quests – in einem spielerischen Dashboard mit Quest-Log, Tactical Map und Leaderboard.",
+    "",
+    "Die App nutzt offene Veranstaltungsdaten aus dem Open-Data-Portal und bereitet sie für Gaming-affine Entdecker:innen auf; einzelne oder alle Events lassen sich als iCal exportieren.",
+    "",
+    "## Methodik",
+    "",
+    "Die App ruft die konfigurierte Datenquelle direkt ab – im Live-Betrieb optional über den ODAS-Proxy – und erkennt das Quellformat automatisch: CKAN `datastore_search`, CSV und iCalendar (ICS) werden normalisiert und in ein einheitliches Event-Modell überführt.",
+    "",
+    "Sie führt Formaterkennung, Normalisierung und zeitliche Filterung durch, berechnet KPIs und wertet Häufigkeiten nach Kategorien sowie Zeiträumen aus. Heutige und anstehende Quests, Wochenüberblick, Kategorien und Veranstalter werden gezählt; die Seltenheits-Kennzeichnung wird über eine feste Zuordnung der Event-Kategorie vergeben.",
+    "",
+    "Welche Felder (z. B. Ort, Koordinaten, Kategorie, Wiederholungsregeln) tatsächlich vorhanden sind, hängt vom jeweiligen Datensatz ab.",
+    "",
+    "## Datenquelle",
+    "",
+    "Die Veranstaltungsdaten werden über das Open-Data-Portal als Datensatz bereitgestellt; die konkrete Ressource wird über die App-Konfiguration festgelegt.",
+    "",
+    "- **Open Data Portal:** [open-data-musterstadt.ckan.de](https://open-data-musterstadt.ckan.de)",
+    "- **Datensatz:** [QuestKalender-Datensatz auf CKAN](https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f)",
+    "- **Ressource:** [CSV-Ressource mit Veranstaltungen](https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f/resource/630c8c4b-a530-4880-becf-ac0b84ea922b)",
+    "",
+    "Angezeigt werden die in der Quelle vorhandenen Termine; Verfügbarkeit und Aktualität hängen vom Pflegestand der Quelle ab.",
+    "",
+    "## Open Data App",
+    "",
+    "Diese App ist eine Open Data App und kann im [Open Data App Store](https://open-data-app-store.de/) betrieben werden. Sie ist Open Source und lässt sich mit kommunalen Veranstaltungsdaten konfigurieren.",
+    "",
+    "- [Open Data App Store](https://open-data-app-store.de/) – die Plattform für Open Data Apps",
+    "- [Alle Open Data Apps auf GitHub](https://github.com/open-data-apps) – die Organisation mit allen Apps",
+    "- [oda-app-eventkalender-gaming](https://github.com/open-data-apps/oda-app-eventkalender-gaming) – das Repository dieser App"
   ],
   "tags-funktion": [
     "Quest-Log",
@@ -93,9 +113,11 @@
       "default": [
         "_multiline_",
         "Du hast Fragen, Feedback oder möchtest ein neues Gaming-Event (Quest) eintragen lassen?",
+        "",
         "Melde dich direkt bei uns:",
-        "Tel.: <a href='tel:+49711310093100'>0711-31009-3100</a>",
-        "E-Mail: <a href='mailto:esports@esslingen.de'>esports@esslingen.de</a>"
+        "",
+        "- Tel.: [0711-31009-3100](tel:+49711310093100)",
+        "- E-Mail: [esports@esslingen.de](mailto:esports@esslingen.de)"
       ],
       "erforderlich": "ja"
     },
@@ -108,15 +130,35 @@
       },
       "default": [
         "_multiline_",
-        "Der QuestKalender bringt städtische und regionale Gaming-Events direkt auf dein Dashboard.",
-        "Finde aktive Quests (Events) im Quest Log, plane deine Strategie mit der Tactical Map, checke Mitspieler in der Co-Op Lobby und verfolge Statistiken im Leaderboard.",
-        "Einzelne oder alle Quests können als iCal (.ics) direkt in deinen persönlichen Kalender exportiert werden.",
-        "<h3>Für wen ist diese App?</h3>",
-        "Diese App präsentiert Veranstaltungen im Gaming-Stil. Sie richtet sich an Gaming-affine Event-Entdecker:innen, die lokale Events auf spielerische Weise erkunden möchten. Besondere Datenkenntnisse sind für die Nutzung nicht erforderlich.",
-        "<h3>Datenquelle</h3>",
-        "<ul><li><strong>Open Data Portal:</strong> <a href=\"https://open-data-musterstadt.ckan.de\" target=\"_blank\" rel=\"noopener\">open-data-musterstadt.ckan.de</a></li><li><strong>Datensatz:</strong> <a href=\"https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f\" target=\"_blank\" rel=\"noopener\">QuestKalender-Datensatz auf CKAN</a></li><li><strong>Ressource:</strong> <a href=\"https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f/resource/630c8c4b-a530-4880-becf-ac0b84ea922b\" target=\"_blank\" rel=\"noopener\">CSV-Ressource mit Veranstaltungen</a></li></ul>",
-        "<h3>Open Data App Store</h3>",
-        "Diese App ist für den Open Data App Store vorbereitet und kann von Kommunen mit eigenen Veranstaltungsdaten konfiguriert werden."
+        "Der QuestKalender (Gaming-Event-Hub) zeigt städtische und regionale Gaming-Events – LAN-Partys, Esports-Turniere, Cosplay-Treffen und Tabletop-Quests – in einem spielerischen Dashboard mit Quest-Log, Tactical Map und Leaderboard.",
+        "",
+        "Die App nutzt offene Veranstaltungsdaten aus dem Open-Data-Portal und bereitet sie für Gaming-affine Entdecker:innen auf; einzelne oder alle Events lassen sich als iCal exportieren.",
+        "",
+        "## Methodik",
+        "",
+        "Die App ruft die konfigurierte Datenquelle direkt ab – im Live-Betrieb optional über den ODAS-Proxy – und erkennt das Quellformat automatisch: CKAN `datastore_search`, CSV und iCalendar (ICS) werden normalisiert und in ein einheitliches Event-Modell überführt.",
+        "",
+        "Sie führt Formaterkennung, Normalisierung und zeitliche Filterung durch, berechnet KPIs und wertet Häufigkeiten nach Kategorien sowie Zeiträumen aus. Heutige und anstehende Quests, Wochenüberblick, Kategorien und Veranstalter werden gezählt; die Seltenheits-Kennzeichnung wird über eine feste Zuordnung der Event-Kategorie vergeben.",
+        "",
+        "Welche Felder (z. B. Ort, Koordinaten, Kategorie, Wiederholungsregeln) tatsächlich vorhanden sind, hängt vom jeweiligen Datensatz ab.",
+        "",
+        "## Datenquelle",
+        "",
+        "Die Veranstaltungsdaten werden über das Open-Data-Portal als Datensatz bereitgestellt; die konkrete Ressource wird über die App-Konfiguration festgelegt.",
+        "",
+        "- **Open Data Portal:** [open-data-musterstadt.ckan.de](https://open-data-musterstadt.ckan.de)",
+        "- **Datensatz:** [QuestKalender-Datensatz auf CKAN](https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f)",
+        "- **Ressource:** [CSV-Ressource mit Veranstaltungen](https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f/resource/630c8c4b-a530-4880-becf-ac0b84ea922b)",
+        "",
+        "Angezeigt werden die in der Quelle vorhandenen Termine; Verfügbarkeit und Aktualität hängen vom Pflegestand der Quelle ab.",
+        "",
+        "## Open Data App",
+        "",
+        "Diese App ist eine Open Data App und kann im [Open Data App Store](https://open-data-app-store.de/) betrieben werden. Sie ist Open Source und lässt sich mit kommunalen Veranstaltungsdaten konfigurieren.",
+        "",
+        "- [Open Data App Store](https://open-data-app-store.de/) – die Plattform für Open Data Apps",
+        "- [Alle Open Data Apps auf GitHub](https://github.com/open-data-apps) – die Organisation mit allen Apps",
+        "- [oda-app-eventkalender-gaming](https://github.com/open-data-apps/oda-app-eventkalender-gaming) – das Repository dieser App"
       ],
       "erforderlich": "ja"
     },
@@ -129,10 +171,17 @@
       },
       "default": [
         "_multiline_",
-        "<h4>Herausgeber</h4>",
-        "<p>Stadt Esslingen am Neckar<br>Rathausplatz 1<br>73728 Esslingen</p>",
-        "<h4>App-Entwicklung</h4>",
-        "<p>Ondics GmbH<br>Blumenstraße 19<br>73728 Esslingen</p>"
+        "## Herausgeber",
+        "",
+        "Stadt Esslingen am Neckar  ",
+        "Rathausplatz 1  ",
+        "73728 Esslingen",
+        "",
+        "## App-Entwicklung",
+        "",
+        "Ondics GmbH  ",
+        "Blumenstraße 19  ",
+        "73728 Esslingen"
       ],
       "erforderlich": "ja"
     },
@@ -146,9 +195,17 @@
       "default": [
         "_multiline_",
         "Diese Anwendung speichert keine personenbezogenen Daten.",
-        "<p>Alle für die Darstellung benötigten Programmbibliotheken werden mit der App ausgeliefert. Beim Aufruf werden dafür keine externen Server kontaktiert.</p>",
-        "<p>Die angezeigten Daten werden vom Browser direkt aus der konfigurierten Datenquelle geladen. Dabei werden technisch bedingt IP-Adresse und Browserkennung an deren Betreiber übermittelt. Maßgeblich ist der Schalter <code>proxyAktiv</code> der Instanz-Konfiguration.</p>",
-        "<h3>Beim Aufruf kontaktierte Drittanbieter</h3><p>Folgende externe Server werden kontaktiert. Dabei werden IP-Adresse und User-Agent der Besucher:innen an diese Anbieter übertragen:</p><ul><li><strong>tile.openstreetmap.org</strong> — Kartenkacheln (OpenStreetMap)</li><li><strong>fonts.googleapis.com</strong> — Google Fonts (Orbitron, Rajdhani); übertragen: IP-Adresse, User-Agent, angeforderte Fonts; wird direkt vor dem ersten Abruf geladen.</li></ul>"
+        "",
+        "Alle für die Darstellung benötigten Programmbibliotheken werden mit der App ausgeliefert. Beim Aufruf werden dafür keine externen Server kontaktiert.",
+        "",
+        "Die angezeigten Daten werden vom Browser direkt aus der konfigurierten Datenquelle geladen. Dabei werden technisch bedingt IP-Adresse und Browserkennung an deren Betreiber übermittelt. Maßgeblich ist der Schalter `proxyAktiv` der Instanz-Konfiguration.",
+        "",
+        "## Beim Aufruf kontaktierte Drittanbieter",
+        "",
+        "Folgende externe Server werden kontaktiert. Dabei werden IP-Adresse und User-Agent der Besucher:innen an diese Anbieter übertragen:",
+        "",
+        "- **tile.openstreetmap.org** — Kartenkacheln (OpenStreetMap)",
+        "- **fonts.googleapis.com** — Google Fonts (Orbitron, Rajdhani); übertragen: IP-Adresse, User-Agent, angeforderte Fonts; wird direkt vor dem ersten Abruf geladen."
       ],
       "erforderlich": "ja"
     },
@@ -270,7 +327,7 @@
       "format": {
         "typ": "markdown"
       },
-      "default": "<ul><li><a href=\"https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f\" target=\"_blank\" rel=\"noopener\">Datenquelle auf CKAN</a></li><li><a href=\"https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f/resource/630c8c4b-a530-4880-becf-ac0b84ea922b\" target=\"_blank\" rel=\"noopener\">CSV-Ressource</a></li></ul>",
+      "default": "- [Datenquelle auf CKAN](https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f)\n- [CSV-Ressource](https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f/resource/630c8c4b-a530-4880-becf-ac0b84ea922b)",
       "erforderlich": "nein"
     },
     "sprache": {
@@ -293,7 +350,7 @@
       "format": {
         "typ": "markdown"
       },
-      "default": "<p>Die Veranstaltungsdaten werden aus verschiedenen Quellformaten (CKAN datastore_search, CSV, ICS) automatisch erkannt und normalisiert. Die KPI-Berechnung basiert auf dem aktuellen Browser-Datum; die Seltenheits-Klassifizierung erfolgt anhand der Event-Häufigkeit im Datensatz.</p>",
+      "default": "Die Veranstaltungsdaten werden aus verschiedenen Quellformaten (CKAN `datastore_search`, CSV, ICS) automatisch erkannt und normalisiert. Die KPI-Berechnung basiert auf dem aktuellen Browser-Datum und wertet Häufigkeiten nach Kategorien sowie Zeiträumen aus; die Seltenheits-Kennzeichnung wird über eine feste Zuordnung der Event-Kategorie vergeben.",
       "erforderlich": "nein"
     },
     "kpiKontext1": {
