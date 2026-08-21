@@ -39,7 +39,7 @@ zum Hochladen in ein Open-Data-Portal vorgesehen:
 
 | Datei | Format | Rolle |
 | --- | --- | --- |
-| `assets/events.csv` | CSV, 20 Datensätze | **maßgebliche Ressource**, auf die `apiurl` zeigt |
+| `assets/events.csv` | CSV, 20 Datensätze | **maßgebliche Ressource**, auf die `apiurls.events` zeigt |
 | `assets/events.ics` | iCalendar (RFC 5545) | dieselben Termine für Kalenderanwendungen |
 
 Die Termine liegen rollierend um den 30.07.2026 — einige abgeschlossen, einige in der
@@ -76,7 +76,7 @@ Geokoordinaten liegen im Raum Esslingen, damit die Kartenansicht sinnvoll zentri
 
 </details>
 
-Nach dem Hochladen sind `apiurl` und `resourceId` in `odas-config/config.json` auf die
+Nach dem Hochladen sind `apiurls.events` und `resourceId` in `odas-config/config.json` auf die
 reale Ressource zu setzen; die Links in `beschreibung` und `weiterfuehrendeLinks` sind
 entsprechend nachzuziehen.
 

@@ -50,7 +50,13 @@
     "App-Entwickler: Ondics GmbH | ",
     "Provided by: ODAS Platform"
   ],
-  "apiurl": "https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f/resource/630c8c4b-a530-4880-becf-ac0b84ea922b/download/events.csv",
+  "apiurls": [
+    {
+      "name": "events",
+      "label": "URL zu den Daten",
+      "url": "https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f/resource/630c8c4b-a530-4880-becf-ac0b84ea922b/download/events.csv"
+    }
+  ],
   "resourceId": "630c8c4b-a530-4880-becf-ac0b84ea922b",
   "maxRecords": "1000",
   "standardKategorie": "alle",

@@ -3,7 +3,7 @@
   "app-entwickler-name": "ondics-gmbh",
   "name-in-url": "questkalender",
   "name": "QuestKalender (z.B. für Gaming-Events)",
-  "version": "1.28.0",
+  "version": "1.29.0",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/odas-app-icon.svg",
   "kurzbeschreibung": "Der ultimative Event-Hub für Gamer. Finde LAN-Partys, Esports-Turniere, Cosplay-Treffen und Tabletop-Quests in deiner Nähe mit XP-Statistiken, Live-Map und iCal-Export.",
@@ -231,17 +231,24 @@
       "beispiel": "https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f",
       "erforderlich": "ja"
     },
-    "apiurl": {
-      "label": "URL zu den Daten",
+    "apiurls": {
+      "label": "URLs zu Datenressourcen",
       "category": "datenherkunft",
-      "hilfe": "Basis-URL des CKAN-Endpunkts (z. B. datastore_search)",
+      "hilfe": "Direkter Download-, Datei- oder API-Endpunkt der tatsächlich verwendeten Datenquelle(n). Mehrere Einträge möglich.",
+      "typ": "array",
       "format": {
         "typ": "url",
-        "laenge": 255
+        "laenge": 500
       },
-      "default": "https://open-data-musterstadt.ckan.de/api/3/action/datastore_search",
-      "beispiel": "https://open-data-musterstadt.ckan.de/api/3/action/datastore_search",
-      "erforderlich": "ja"
+      "urls": [
+        {
+          "name": "events",
+          "label": "URL zu den Daten",
+          "default": "https://open-data-musterstadt.ckan.de/api/3/action/datastore_search",
+          "beispiel": "https://open-data-musterstadt.ckan.de/api/3/action/datastore_search",
+          "erforderlich": "ja"
+        }
+      ]
     },
     "resourceId": {
       "label": "Ressourcen-ID",
