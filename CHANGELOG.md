@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.32.0 - 2026-08-25
+- **CHG:** Proxy-Aufruf sendet die vollständige Ziel-URL statt nur Pfad+Query, damit die neue Origin-Allowlist-Prüfung der ODAS-Plattform greift (bisher implizite Auflösung gegen den ersten konfigurierten `apiurl`).
+
+
 ## 1.31.0 - 2026-08-25
 - **CHG:** apiurls-Standard „Eine Quelle = eine vollständige URL“ umgesetzt: Instanzfelder `resourceId` und `maxRecords` entfernt; Paket-Default ist jetzt die vollständige Download-URL (löst die bisherige Abweichung zwischen `resourceId`-Default und konfigurierter Ressource).
 
