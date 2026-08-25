@@ -20,7 +20,7 @@ Die App ist eine Single Page Application (Webapp) mit:
 ---
 
 ## Datenformat
-Die App unterstützt sowohl **JSON** (inklusive CKAN Datastore), **CSV** (mit automatischer Delimiter-Erkennung) als auch **iCal / ICS**-Feeds als direkte Datenquellen über die API-URL / Ressourcen-ID.
+Die App unterstützt sowohl **JSON** (inklusive CKAN Datastore), **CSV** (mit automatischer Delimiter-Erkennung) als auch **iCal / ICS**-Feeds als direkte Datenquellen über eine vollständige API-URL (bei Datastore-Abfragen inklusive `resource_id`).
 
 Das Feldmodell ist in `assets/schema.json` als Frictionless *tabular-data-resource*
 beschrieben. Pflichtfelder sind `event_id`, `titel` und `datum_start`; Datensätze ohne
@@ -76,7 +76,7 @@ Geokoordinaten liegen im Raum Esslingen, damit die Kartenansicht sinnvoll zentri
 
 </details>
 
-Nach dem Hochladen sind `apiurls.events` und `resourceId` in `odas-config/config.json` auf die
+Nach dem Hochladen sind `apiurls.events` (vollständige URL inklusive `resource_id` bei Datastore-Abfragen) in `odas-config/config.json` auf die
 reale Ressource zu setzen; die Links in `beschreibung` und `weiterfuehrendeLinks` sind
 entsprechend nachzuziehen.
 

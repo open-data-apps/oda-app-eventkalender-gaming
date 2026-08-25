@@ -139,8 +139,6 @@ function app(configdata = {}, enclosingHtmlDivElement) {
   const qkUid = "i" + ++qkInstanzZaehler;
   // 1. CONFIGURATION
   const API_URL = getOdasApiUrl(configdata, "events");
-  const RESOURCE_ID = configdata.resourceId || "";
-  const MAX_RECORDS = Number(configdata.maxRecords || 1000);
   const STANDARD_KATEGORIE = configdata.standardKategorie || "alle";
 
   let mapCenter = [48.7396, 9.3097]; // Esslingen default
@@ -603,10 +601,8 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     }
 
     try {
-      let fetchUrl = API_URL;
-      if (RESOURCE_ID && !API_URL.endsWith(".json")) {
-        fetchUrl += `?resource_id=${encodeURIComponent(RESOURCE_ID)}&limit=${MAX_RECORDS}`;
-      }
+      // Eine Quelle = eine vollständige URL: keine Konfig-Fragmente mehr anhaengen.
+      const fetchUrl = API_URL;
 
       // Relative Pfade liegen im eigenen Origin und brauchen nie den Proxy.
       const istRelativ =

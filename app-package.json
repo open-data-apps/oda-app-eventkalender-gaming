@@ -3,7 +3,7 @@
   "app-entwickler-name": "ondics-gmbh",
   "name-in-url": "questkalender",
   "name": "QuestKalender (z.B. für Gaming-Events)",
-  "app-version": "1.30.0",
+  "app-version": "1.31.0",
   "app-package-version": "2",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/odas-app-icon.svg",
@@ -245,33 +245,11 @@
         {
           "name": "events",
           "label": "URL zu den Daten",
-          "default": "https://open-data-musterstadt.ckan.de/api/3/action/datastore_search",
-          "beispiel": "https://open-data-musterstadt.ckan.de/api/3/action/datastore_search",
+          "default": "https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f/resource/630c8c4b-a530-4880-becf-ac0b84ea922b/download/events.csv",
+          "beispiel": "https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f/resource/630c8c4b-a530-4880-becf-ac0b84ea922b/download/events.csv",
           "erforderlich": "ja"
         }
       ]
-    },
-    "resourceId": {
-      "label": "Ressourcen-ID",
-      "category": "datenherkunft",
-      "hilfe": "CKAN Ressourcen-ID des Datensatzes",
-      "format": {
-        "typ": "string",
-        "laenge": 100
-      },
-      "default": "36aa580e-0c46-4f76-bc95-fbba9a5c5fa3",
-      "beispiel": "36aa580e-0c46-4f76-bc95-fbba9a5c5fa3",
-      "erforderlich": "ja"
-    },
-    "maxRecords": {
-      "label": "Maximaler Datensätze",
-      "category": "sonstiges",
-      "hilfe": "Maximale Anzahl an Einträgen, die geladen werden (z.B. 1000)",
-      "format": {
-        "typ": "string"
-      },
-      "default": "1000",
-      "erforderlich": "nein"
     },
     "standardKategorie": {
       "label": "Standard-Kategorie",

@@ -57,8 +57,6 @@
       "url": "https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f/resource/630c8c4b-a530-4880-becf-ac0b84ea922b/download/events.csv"
     }
   ],
-  "resourceId": "630c8c4b-a530-4880-becf-ac0b84ea922b",
-  "maxRecords": "1000",
   "standardKategorie": "alle",
   "karteZentrum": "48.7396, 9.3097",
   "karteZoom": "12",
