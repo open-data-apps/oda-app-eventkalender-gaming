@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.32.1 - 2026-09-01
+
+- **FIX:** `beschreibung` korrigiert – Ressourcen-Link nutzt jetzt `{{{appinstanz.apiurls.1}}}` statt `{{{urlDaten}}}/resource/…`; lokale `odas-config` auf Download-Endpunkt korrigiert (Inventur 2026-09-01).
+
 ## 1.32.0 - 2026-08-25
 - **CHG:** Proxy-Aufruf sendet die vollständige Ziel-URL statt nur Pfad+Query, damit die neue Origin-Allowlist-Prüfung der ODAS-Plattform greift (bisher implizite Auflösung gegen den ersten konfigurierten `apiurl`).
 

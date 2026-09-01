@@ -16,7 +16,7 @@
     "<ul>",
     "<li><strong>Open Data Portal:</strong> <a href=\"https://open-data-musterstadt.ckan.de\" target=\"_blank\">open-data-musterstadt.ckan.de</a></li>",
     "<li><strong>Datensatz:</strong> <a href=\"https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f\" target=\"_blank\">QuestKalender-Datensatz auf CKAN</a></li>",
-    "<li><strong>Ressource:</strong> <a href=\"https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f/resource/630c8c4b-a530-4880-becf-ac0b84ea922b\" target=\"_blank\">CSV-Ressource mit Veranstaltungen</a></li>",
+    "<li><strong>Ressource:</strong> <a href=\"https://open-data-musterstadt.ckan.de/dataset/33a51ed9-c76e-441f-b6e6-6c1bb55d4e8f/resource/630c8c4b-a530-4880-becf-ac0b84ea922b/download/events.csv\" target=\"_blank\">CSV-Ressource mit Veranstaltungen</a></li>",
     "</ul>",
     "<p>Angezeigt werden die in der Quelle vorhandenen Termine; Verfügbarkeit und Aktualität hängen vom Pflegestand der Quelle ab.</p>",
     "<h2>Open Data App</h2>",
