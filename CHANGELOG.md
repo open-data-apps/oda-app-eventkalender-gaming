@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.32.2 - 2026-09-07
+- **CHORE:** Frictionless-Prüfung: Schema, `daten`-Block und Slot bereits konform (Header-Match verifiziert, keine fremde Resource-ID) — keine inhaltliche Änderung.
+
 ## 1.32.1 - 2026-09-01
 
 - **FIX:** `beschreibung` korrigiert – Ressourcen-Link nutzt jetzt `{{{appinstanz.apiurls.1}}}` statt `{{{urlDaten}}}/resource/…`; lokale `odas-config` auf Download-Endpunkt korrigiert (Inventur 2026-09-01).
