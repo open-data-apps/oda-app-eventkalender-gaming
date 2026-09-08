@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.32.2 - 2026-09-07
+## 1.32.4 - 2026-09-08
 - **FIX:** F-92-Nachbesserung: top-level `escapeHtml` für `renderOdasFehler` bzw. Fehlerrender ins Status-Element statt Root (Layout-Scaffold bleibt erhalten, Regressionen check-two-instance-runtime/check-three-states grün) (1.32.3 -> 1.32.4).
+
+## 1.32.3 - 2026-09-08
 - **FIX:** Variante-A-Verdrahtung (F-92): Typprüfung (ckan-dl) vor dem ersten Fetch; Ladefehler über `renderOdasFehler` (1.32.2 -> 1.32.3).
+
+## 1.32.2 - 2026-09-07
 - **CHORE:** Frictionless-Prüfung: Schema, `daten`-Block und Slot bereits konform (Header-Match verifiziert, keine fremde Resource-ID) — keine inhaltliche Änderung.
 
 ## 1.32.1 - 2026-09-01
