@@ -298,6 +298,23 @@ function app(configdata = {}, enclosingHtmlDivElement) {
   const qkUid = "i" + ++qkInstanzZaehler;
   // 1. CONFIGURATION
   const API_URL = getOdasApiUrl(configdata, "events");
+
+  // Variante A (F-92): Typ- und Quellenpruefung vor dem ersten Fetch.
+  const qkKontext = {
+    url: API_URL,
+    label: "Event-API",
+    typLabel: "Datei-Download",
+    erwarteterTyp: "ckan-dl",
+  };
+  if (isKeineDatenquelleKonfiguriert(API_URL)) {
+    renderOdasFehler(enclosingHtmlDivElement, new Error("Keine Datenquelle konfiguriert."), qkKontext);
+    return null;
+  }
+  const qkTypWarn = validateUrlTypErwartung(API_URL, "ckan-dl");
+  if (qkTypWarn) {
+    renderOdasFehler(enclosingHtmlDivElement, new Error(qkTypWarn), qkKontext);
+    return null;
+  }
   const STANDARD_KATEGORIE = configdata.standardKategorie || "alle";
 
   let mapCenter = [48.7396, 9.3097]; // Esslingen default
@@ -776,7 +793,17 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     } catch (err) {
       if (disposed) return;
       console.error("Fehler beim Laden der Veranstaltungsdaten:", err);
-      showError("Die Veranstaltungsdaten konnten nicht geladen werden. Bitte prüfen Sie die Datenquelle.");
+      const qkFehlerBox = document.getElementById(`${rootId}-tab-content`);
+      if (qkFehlerBox) {
+        renderOdasFehler(qkFehlerBox, err, {
+          url: API_URL,
+          label: "Event-API",
+          typLabel: "Datei-Download",
+          erwarteterTyp: "ckan-dl",
+        });
+      } else {
+        showError("Die Veranstaltungsdaten konnten nicht geladen werden. Bitte prüfen Sie die Datenquelle.");
+      }
     }
   }
 

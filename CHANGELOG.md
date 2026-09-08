@@ -1,6 +1,7 @@
 # Changelog
 
 ## 1.32.2 - 2026-09-07
+- **FIX:** Variante-A-Verdrahtung (F-92): Typprüfung (ckan-dl) vor dem ersten Fetch; Ladefehler über `renderOdasFehler` (1.32.2 -> 1.32.3).
 - **CHORE:** Frictionless-Prüfung: Schema, `daten`-Block und Slot bereits konform (Header-Match verifiziert, keine fremde Resource-ID) — keine inhaltliche Änderung.
 
 ## 1.32.1 - 2026-09-01
