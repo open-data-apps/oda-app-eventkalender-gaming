@@ -80,18 +80,21 @@ async function fetchViaOdasProxy(targetUrl, options = {}) {
   return proxyData.content;
 }
 
-async function fetchOdasResource(targetUrl, configdata = {}) {
+async function fetchOdasResource(targetUrl, configdata = {}, options = {}) {
   if (isOdasProxyEnabled(configdata)) {
-    return fetchViaOdasProxy(targetUrl);
+    return fetchViaOdasProxy(targetUrl, options);
   }
 
   try {
-    const response = await fetch(targetUrl);
+    const response = await fetch(targetUrl, {
+      signal: options && options.signal ? options.signal : undefined,
+    });
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
     return response.text();
   } catch (error) {
+    if (error && error.name === "AbortError") throw error;
     throw new Error(
       `Direkter Datenabruf fehlgeschlagen (${error.message}). Bitte prüfen Sie die Daten-URL und die CORS-Freigabe der Datenquelle.`,
     );
@@ -109,8 +112,8 @@ function getOdasApiUrl(configdata, name) {
   return String((treffer && treffer.url) || "").trim();
 }
 
-async function fetchOdasJson(targetUrl, configdata = {}) {
-  const rawContent = await fetchOdasResource(targetUrl, configdata);
+async function fetchOdasJson(targetUrl, configdata = {}, options = {}) {
+  const rawContent = await fetchOdasResource(targetUrl, configdata, options);
   try {
     return JSON.parse(rawContent);
   } catch (_error) {
@@ -281,15 +284,6 @@ function renderOdasFehler(container, error, kontext = {}) {
   container.innerHTML = `<div class="alert ${alertClass}" role="alert"><strong>${escapeHtml(titel)}</strong><p class="mb-1">${escapeHtml(info.hinweis)}</p>${urlZeile}<details class="small"><summary>Details</summary><code>${escapeHtml(info.detail || String(error))}</code></details></div>`;
 }
 
-function isLeerErgebnis(json) {
-  if (!json) return true;
-  if (Array.isArray(json) && json.length === 0) return true;
-  if (Array.isArray(json.records) && json.records.length === 0) return true;
-  if (Array.isArray(json.results) && json.results.length === 0) return true;
-  if (json.result && Array.isArray(json.result.records) && json.result.records.length === 0) return true;
-  return false;
-}
-
 
 /*
  * Template-Hook (oda-generic 1.4.0). Die Base ruft ihn vor dem Rendern der neuen
@@ -368,10 +362,16 @@ function app(configdata = {}, enclosingHtmlDivElement) {
   const rootId = "eventkalender-" + qkInstanzZaehler;
 
   let disposed = false;
+  // QG-B3: eigener Controller je Instanz — laufende Abrufe brechen beim
+  // Seitenwechsel ab (das disposed-Flag schuetzt nur die Oberflaeche).
+  const qgAbort = new AbortController();
 
   const runtime = {
     dispose() {
       disposed = true;
+      try {
+        qgAbort.abort();
+      } catch (_e) {}
       if (leafletMap) {
         try {
           leafletMap.remove();
@@ -407,6 +407,15 @@ function app(configdata = {}, enclosingHtmlDivElement) {
       }
     },
   };
+  // QG-B1: Vorgaenger-Instanz desselben Containers zuerst abraeumen. Ohne das
+  // blieben bei Same-Page-Re-Render alte Leaflet-Karte, beide Chart-Instanzen
+  // und der AudioContext am Leben (dispose() lief nur beim Seitenwechsel).
+  const qgVorheriger = questKalenderInstances.get(enclosingHtmlDivElement);
+  if (qgVorheriger) {
+    try {
+      qgVorheriger.dispose();
+    } catch (_e) {}
+  }
   questKalenderInstances.set(enclosingHtmlDivElement, runtime);
 
   // 3. AUDIO SYSTEM (Web Audio API)
@@ -798,6 +807,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
       const rawContent = await fetchOdasResource(
         fetchUrl,
         istRelativ ? {} : configdata,
+        { signal: qgAbort.signal },
       );
       if (disposed) return;
 
@@ -2234,34 +2244,52 @@ function app(configdata = {}, enclosingHtmlDivElement) {
       callback();
       return;
     }
-    const link = document.createElement("link");
-    link.id = "leaflet-css";
-    link.rel = "stylesheet";
-    link.href = "vendor/leaflet/leaflet.css";
-    document.head.appendChild(link);
+    if (!document.getElementById("leaflet-css")) {
+      const link = document.createElement("link");
+      link.id = "leaflet-css";
+      link.rel = "stylesheet";
+      link.href = "vendor/leaflet/leaflet.css";
+      document.head.appendChild(link);
+    }
 
+    // QG-B2: Fehlerpfad und Wiederverwendung. Vorher fehlte onerror — eine nicht
+    // ladbare Bibliothek liess Karte/Diagramme stumm verschwinden; ausserdem
+    // haengte jede Instanz erneut Tags an.
+    if (document.getElementById("leaflet-js")) {
+      meldeBibliotheksFehler("Leaflet");
+      return;
+    }
     const script = document.createElement("script");
     script.id = "leaflet-js";
     script.src = "vendor/leaflet/leaflet.js";
     script.async = true;
+    script.onerror = () => meldeBibliotheksFehler("Leaflet");
     script.onload = () => {
-      const clusterLink = document.createElement("link");
-      clusterLink.id = "leaflet-markercluster-css";
-      clusterLink.rel = "stylesheet";
-      clusterLink.href = "vendor/markercluster/MarkerCluster.css";
-      document.head.appendChild(clusterLink);
+      if (!document.getElementById("leaflet-markercluster-css")) {
+        const clusterLink = document.createElement("link");
+        clusterLink.id = "leaflet-markercluster-css";
+        clusterLink.rel = "stylesheet";
+        clusterLink.href = "vendor/markercluster/MarkerCluster.css";
+        document.head.appendChild(clusterLink);
+      }
+      if (!document.getElementById("leaflet-markercluster-default-css")) {
+        const clusterDefaultLink = document.createElement("link");
+        clusterDefaultLink.id = "leaflet-markercluster-default-css";
+        clusterDefaultLink.rel = "stylesheet";
+        clusterDefaultLink.href = "vendor/markercluster/MarkerCluster.Default.css";
+        document.head.appendChild(clusterDefaultLink);
+      }
 
-      const clusterDefaultLink = document.createElement("link");
-      clusterDefaultLink.id = "leaflet-markercluster-default-css";
-      clusterDefaultLink.rel = "stylesheet";
-      clusterDefaultLink.href = "vendor/markercluster/MarkerCluster.Default.css";
-      document.head.appendChild(clusterDefaultLink);
-
+      if (document.getElementById("leaflet-markercluster-js")) {
+        meldeBibliotheksFehler("Leaflet MarkerCluster");
+        return;
+      }
       const clusterScript = document.createElement("script");
       clusterScript.id = "leaflet-markercluster-js";
       clusterScript.src = "vendor/markercluster/leaflet.markercluster.js";
       clusterScript.async = true;
       clusterScript.onload = callback;
+      clusterScript.onerror = () => meldeBibliotheksFehler("Leaflet MarkerCluster");
       document.head.appendChild(clusterScript);
     };
     document.head.appendChild(script);
@@ -2272,12 +2300,35 @@ function app(configdata = {}, enclosingHtmlDivElement) {
       callback();
       return;
     }
+    // QG-B2: wie loadLeaflet — Fehlerpfad statt stillem Ausbleiben.
+    if (document.getElementById("chart-js")) {
+      meldeBibliotheksFehler("Chart.js");
+      return;
+    }
     const script = document.createElement("script");
     script.id = "chart-js";
     script.src = "vendor/chartjs/chart.umd.min.js";
     script.async = true;
     script.onload = callback;
+    script.onerror = () => meldeBibliotheksFehler("Chart.js");
     document.head.appendChild(script);
+  }
+
+  // QG-B2: Eine nicht ladbare Bibliothek wird sichtbar gemeldet, statt Karte und
+  // Diagramme kommentarlos leer zu lassen.
+  function meldeBibliotheksFehler(name) {
+    if (disposed) return;
+    const ziel =
+      document.getElementById(`${rootId}-data-warnings`) ||
+      enclosingHtmlDivElement;
+    if (!ziel) return;
+    renderOdasFehler(
+      ziel,
+      new Error(
+        `${name} konnte nicht geladen werden. Karte bzw. Diagramme stehen daher nicht zur Verfuegung.`,
+      ),
+      { label: name, typLabel: "Bibliothek" },
+    );
   }
 
 
@@ -2367,7 +2418,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
 // REQUIRED FUNCTION OUTSIDE app()
 // ═══════════════════════════════════════════
 function addToHead() {
-  return;
+  return ``;
 }
 
 function safeHttpUrl(value) {

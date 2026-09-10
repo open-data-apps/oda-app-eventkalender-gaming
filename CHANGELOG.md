@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.32.5 - 2026-09-10
+- **FIX (QG-B1):** `questKalenderInstances.set(...)` ohne Vorgänger-Cleanup — bei Same-Page-Re-Render blieben alte Leaflet-Karte, beide Chart-Instanzen **und** der AudioContext am Leben. Jetzt läuft `dispose()` der Vorgänger-Instanz zuerst (gleicher Befund wie EK-B1 im Eventkalender).
+- **FIX (QG-B2):** `loadLeaflet()`/`loadChartJS()` sind Callback-Loader ohne `onerror` und ohne Wiederverwendung: eine nicht ladbare Bibliothek ließ Karte/Diagramme stumm verschwinden, jede Instanz hängte erneut Tags an. Jetzt Fehlerpfad über `meldeBibliotheksFehler()` (sichtbare Meldung im Warnbereich) und Prüfung vorhandener Tags (gleicher Befund wie EK-B2).
+- **FIX (QG-B3):** `AbortController` je Instanz; Event-Abruf mit `signal`, Abbruch in `dispose()`. `fetchOdasResource`/`fetchOdasJson` reichen `signal` durch und werfen `AbortError` unverpackt.
+- **TECH (QG-B4):** `isLeerErgebnis` entfernt; `addToHead` gibt `""` statt `undefined` zurück.
+
 ## 1.32.4 - 2026-09-08
 - **FIX:** F-92-Nachbesserung: top-level `escapeHtml` für `renderOdasFehler` bzw. Fehlerrender ins Status-Element statt Root (Layout-Scaffold bleibt erhalten, Regressionen check-two-instance-runtime/check-three-states grün) (1.32.3 -> 1.32.4).
 
