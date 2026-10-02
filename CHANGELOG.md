@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.32.6 - 2026-10-02
+- ENH: Verwendete ODAS-Dienste in `odas-services` deklariert.
+
 ## 1.32.5 - 2026-09-10
 - **FIX (QG-B1):** `questKalenderInstances.set(...)` ohne Vorgänger-Cleanup — bei Same-Page-Re-Render blieben alte Leaflet-Karte, beide Chart-Instanzen **und** der AudioContext am Leben. Jetzt läuft `dispose()` der Vorgänger-Instanz zuerst (gleicher Befund wie EK-B1 im Eventkalender).
 - **FIX (QG-B2):** `loadLeaflet()`/`loadChartJS()` sind Callback-Loader ohne `onerror` und ohne Wiederverwendung: eine nicht ladbare Bibliothek ließ Karte/Diagramme stumm verschwinden, jede Instanz hängte erneut Tags an. Jetzt Fehlerpfad über `meldeBibliotheksFehler()` (sichtbare Meldung im Warnbereich) und Prüfung vorhandener Tags (gleicher Befund wie EK-B2).
