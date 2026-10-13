@@ -933,6 +933,13 @@ function app(configdata = {}, enclosingHtmlDivElement) {
 
     // Split headers
     const headers = splitCSVLine(header, delimiter).map(h => h.trim().toLowerCase());
+    // F-112: Eine Fehlerseite im Textformat (z. B. "Service Unavailable") ist kein leerer Bestand.
+    const hasStartField = ["datum_start", "start", "dtstart"].some(field =>
+      headers.includes(field),
+    );
+    if (!hasStartField) {
+      throw new Error("CSV enthält kein erwartetes Startdatumsfeld.");
+    }
 
     const result = [];
     let skipped = 0;
@@ -960,8 +967,15 @@ function app(configdata = {}, enclosingHtmlDivElement) {
       const ch = text[i];
       if (ch === '"') {
         current += ch;
-        if (inQuotes && text[i + 1] === '"') current += text[++i];
-        else inQuotes = !inQuotes;
+        if (inQuotes) {
+          if (text[i + 1] === '"') current += text[++i];
+          else inQuotes = false;
+        } else {
+          // RFC 4180: Nur ein Anführungszeichen am Feldanfang öffnet einen Quote-Bereich;
+          // mitten im Feld (z. B. 12" Vinyl) ist es ein normales Zeichen.
+          const vorher = current.length > 1 ? current[current.length - 2] : "";
+          if (current.length === 1 || vorher === ";" || vorher === "," || vorher === "\t") inQuotes = true;
+        }
       } else if ((ch === "\n" || ch === "\r") && !inQuotes) {
         if (ch === "\r" && text[i + 1] === "\n") i++;
         if (current.trim()) records.push(current);
@@ -981,7 +995,8 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     let entry = "";
     for (let i = 0; i < line.length; i++) {
       const char = line[i];
-      if (char === '"') {
+      if (char === '"' && (insideQuote || entry.trim() === "")) {
+        // Wie splitCSVRecords: Quote-Bereich nur am Feldanfang, sonst normales Zeichen.
         if (insideQuote && line[i + 1] === '"') { entry += '"'; i++; }
         else insideQuote = !insideQuote;
       } else if (char === delimiter && !insideQuote) {
@@ -1130,13 +1145,11 @@ function app(configdata = {}, enclosingHtmlDivElement) {
   // UTC-Instanz (Date) um. Strings mit "Z"-Suffix oder numerischem Offset
   // (z.B. "+02:00") gelten bereits als absolut und werden direkt geparst.
   //
-  // Ansatz (bewusst ohne zusaetzliche Library): Die Wanduhrzeit-Komponenten
-  // werden zunaechst als UTC interpretiert (grober Schaetzwert). Anschliessend
-  // wird ermittelt, wie dieser Schaetzwert in der Zielzeitzone dargestellt
-  // wuerde (via Intl.DateTimeFormat mit timeZone). Die Differenz zwischen
-  // beiden Darstellungen ist der tatsaechliche UTC-Offset der Zielzeitzone
-  // zu diesem Zeitpunkt (inkl. Sommerzeit), der vom Schaetzwert abgezogen
-  // wird, um die korrekte UTC-Instanz zu erhalten.
+  // Ansatz (bewusst ohne zusaetzliche Library, F-136): Die Wanduhrzeit wird als
+  // UTC-Wert gebildet; fuer die Zonen-Offsets von Vortag, Tag und Folgetag wird
+  // geprueft, welche UTC-Instanz in der Zielzone dieselbe Wanduhrzeit ergibt.
+  // RFC 5545 3.3.5: bei doppelter Ortszeit gilt die erste, in einer Luecke der
+  // Offset vor der Umstellung.
   function parseEventDateTime(dateStr, tzid) {
     if (!dateStr) return null;
 
@@ -1160,7 +1173,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     const second = match[6] !== undefined ? Number(match[6]) : 0;
 
     const zone = tzid || "Europe/Berlin";
-    const guessUtcMs = Date.UTC(year, month - 1, day, hour, minute, second);
+    const asUTC = Date.UTC(year, month - 1, day, hour, minute, second);
 
     let formatter;
     try {
@@ -1168,8 +1181,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
         timeZone: zone, hour12: false, year: "numeric", month: "2-digit",
         day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit",
       });
-    } catch (_error) { return new Date(guessUtcMs); }
-    const asUTC = guessUtcMs;
+    } catch (_error) { return new Date(asUTC); }
     // F-136 / RFC 5545 3.3.5: Offset am Zielzeitpunkt prüfen.
     // Bei doppelter Ortszeit gilt die erste, bei einer Lücke der Offset davor.
     function wallClock(ms) {

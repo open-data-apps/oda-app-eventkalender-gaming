@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.32.12 - 2026-10-13
+- FIX: F-135 (Nachbesserung): Ein Anführungszeichen mitten im Feld (z. B. 12" Vinyl) ist ein normales Zeichen und verschmilzt keine Datensätze mehr (RFC 4180).
+- FIX: F-112 (Nachbesserung): Eine Fehlerseite im Textformat ohne Startdatumsfeld wird als Formatfehler gemeldet statt als leerer Bestand.
+
 ## 1.32.11 - 2026-10-13
 - FIX: F-158: Schneller Wechsel von der Karte zu einer anderen Ansicht erzeugt keinen JavaScript-Fehler mehr (Karte ohne Zoomanimation, kein verwaister Zoom-Timer).
 
