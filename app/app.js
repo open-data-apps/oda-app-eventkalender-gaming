@@ -362,6 +362,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
   const rootId = "eventkalender-" + qkInstanzZaehler;
 
   let disposed = false;
+  let loadVersion = 0; // F-121: Nur der jüngste Refresh darf Daten/Fehler rendern.
   // QG-B3: eigener Controller je Instanz — laufende Abrufe brechen beim
   // Seitenwechsel ab (das disposed-Flag schuetzt nur die Oberflaeche).
   const qgAbort = new AbortController();
@@ -369,6 +370,8 @@ function app(configdata = {}, enclosingHtmlDivElement) {
   const runtime = {
     dispose() {
       disposed = true;
+      // F-113: Der eigene body-Dialog darf keine Unterseite überlagern.
+      document.getElementById(`${rootId}-random-modal`)?.remove();
       try {
         qgAbort.abort();
       } catch (_e) {}
@@ -760,8 +763,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
           alert("No campaigns to export.");
           return;
         }
-        const icsString = generateICS(filteredEvents);
-        downloadICS(icsString, "quest_campaigns.ics");
+        exportiereICS(filteredEvents, "quest_campaigns.ics", btnExportAll);
       });
     }
 
@@ -785,6 +787,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
   // 7. DATENABRUF: direkt oder ueber den ODAS-Proxy (proxyAktiv)
 
   async function loadAllData() {
+    const version = ++loadVersion;
     showLoading();
 
     const quelle = String(API_URL || "").trim();
@@ -809,11 +812,11 @@ function app(configdata = {}, enclosingHtmlDivElement) {
         istRelativ ? {} : configdata,
         { signal: qgAbort.signal },
       );
-      if (disposed) return;
+      if (disposed || version !== loadVersion) return;
 
       parseAndNormalize(rawContent);
     } catch (err) {
-      if (disposed) return;
+      if (disposed || version !== loadVersion) return;
       console.error("Fehler beim Laden der Veranstaltungsdaten:", err);
       const qkFehlerBox = document.getElementById(`${rootId}-tab-content`);
       if (qkFehlerBox) {
@@ -838,21 +841,29 @@ function app(configdata = {}, enclosingHtmlDivElement) {
       console.log("iCalendar-Format (ICS) erkannt, parse...");
       parsedData = parseICS(content);
     } else {
-      // Check if JSON
-      try {
-        const json = JSON.parse(content);
-        if (json.success && json.result && Array.isArray(json.result.records)) {
+      let json;
+      let parsedJson = false;
+      try { json = JSON.parse(content); parsedJson = true; }
+      catch (err) {
+        // F-112: Erkennbar defektes JSON/HTML nicht als CSV-Erfolg umdeuten.
+        if (/^\s*[\[{<]/.test(content)) {
+          throw new Error("Unbekanntes Antwortformat: Veranstaltungsliste als JSON, CSV oder ICS erwartet.");
+        }
+      }
+      if (parsedJson) {
+        if (json && json.success === false) throw new Error("Unbekanntes Antwortformat: Die Quelle meldet einen API-Fehler.");
+        if (json && json.result && Array.isArray(json.result.records)) {
           parsedData = json.result.records;
         } else if (Array.isArray(json)) {
           parsedData = json;
-        } else if (json.records && Array.isArray(json.records)) {
+        } else if (json && Array.isArray(json.records)) {
           parsedData = json.records;
-        } else if (json.data && Array.isArray(json.data)) {
+        } else if (json && Array.isArray(json.data)) {
           parsedData = json.data;
+        } else {
+          throw new Error("Unbekanntes Antwortformat: Veranstaltungsliste erwartet.");
         }
-      } catch (err) {
-        // JSON failed, try CSV parser
-        console.log("JSON parsing fehlgeschlagen, versuche CSV...");
+      } else {
         const csvResult = parseCSV(content);
         parsedData = csvResult.rows;
         brokenCsvRows = csvResult.skipped;
@@ -911,7 +922,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
   // Liefert { rows, skipped } - Zeilen mit weniger Feldern als Header (kaputte
   // CSV-Zeile) werden verworfen und gezaehlt statt still ignoriert (F-73).
   function parseCSV(text) {
-    const lines = text.split(/\r?\n/).filter(line => line.trim());
+    const lines = splitCSVRecords(text);
     if (lines.length === 0) return { rows: [], skipped: 0 };
 
     // Detect delimiter
@@ -941,15 +952,38 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     return { rows: result, skipped };
   }
 
+  function splitCSVRecords(text) {
+    // F-135: Quotes bis zur Feldauswertung erhalten, nur äußere Zeilen trennen.
+    const records = [];
+    let current = "", inQuotes = false;
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      if (ch === '"') {
+        current += ch;
+        if (inQuotes && text[i + 1] === '"') current += text[++i];
+        else inQuotes = !inQuotes;
+      } else if ((ch === "\n" || ch === "\r") && !inQuotes) {
+        if (ch === "\r" && text[i + 1] === "\n") i++;
+        if (current.trim()) records.push(current);
+        current = "";
+      } else {
+        current += ch;
+      }
+    }
+    if (inQuotes) throw new Error("CSV enthält nicht geschlossene Anführungszeichen.");
+    if (current.trim()) records.push(current);
+    return records;
+  }
+
   function splitCSVLine(line, delimiter) {
     const result = [];
     let insideQuote = false;
     let entry = "";
-    
     for (let i = 0; i < line.length; i++) {
       const char = line[i];
       if (char === '"') {
-        insideQuote = !insideQuote;
+        if (insideQuote && line[i + 1] === '"') { entry += '"'; i++; }
+        else insideQuote = !insideQuote;
       } else if (char === delimiter && !insideQuote) {
         result.push(entry.trim());
         entry = "";
@@ -1128,31 +1162,31 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     const zone = tzid || "Europe/Berlin";
     const guessUtcMs = Date.UTC(year, month - 1, day, hour, minute, second);
 
-    let offsetMs = 0;
+    let formatter;
     try {
-      const dtf = new Intl.DateTimeFormat("en-US", {
-        timeZone: zone,
-        hour12: false,
-        year: "numeric", month: "2-digit", day: "2-digit",
-        hour: "2-digit", minute: "2-digit", second: "2-digit"
+      formatter = new Intl.DateTimeFormat("en-US", {
+        timeZone: zone, hour12: false, year: "numeric", month: "2-digit",
+        day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit",
       });
-      const parts = {};
-      dtf.formatToParts(new Date(guessUtcMs)).forEach(p => {
-        if (p.type !== "literal") parts[p.type] = p.value;
+    } catch (_error) { return new Date(guessUtcMs); }
+    const asUTC = guessUtcMs;
+    // F-136 / RFC 5545 3.3.5: Offset am Zielzeitpunkt prüfen.
+    // Bei doppelter Ortszeit gilt die erste, bei einer Lücke der Offset davor.
+    function wallClock(ms) {
+      const values = {};
+      formatter.formatToParts(new Date(ms)).forEach((part) => {
+        if (part.type !== "literal") values[part.type] = part.value;
       });
-      // Manche Engines liefern "24" statt "00" fuer Mitternacht bei hour12:false.
-      const hourVal = parts.hour === "24" ? 0 : Number(parts.hour);
-      const asIfUtcMs = Date.UTC(
-        Number(parts.year), Number(parts.month) - 1, Number(parts.day),
-        hourVal, Number(parts.minute), Number(parts.second)
-      );
-      offsetMs = asIfUtcMs - guessUtcMs;
-    } catch (e) {
-      // Unbekannte/ungueltige Zeitzone -> Verhalten wie zuvor (keine Verschiebung).
-      offsetMs = 0;
+      return Date.UTC(Number(values.year), Number(values.month) - 1, Number(values.day),
+        Number(values.hour) === 24 ? 0 : Number(values.hour), Number(values.minute), Number(values.second));
     }
-
-    return new Date(guessUtcMs - offsetMs);
+    const offsets = new Set([-86400000, 0, 86400000].map((delta) =>
+      wallClock(asUTC + delta) - (asUTC + delta)));
+    const candidates = [...offsets].map((offset) => asUTC - offset)
+      .filter((candidate) => wallClock(candidate) === asUTC);
+    if (candidates.length) return new Date(Math.min(...candidates));
+    const beforeOffset = wallClock(asUTC - 86400000) - (asUTC - 86400000);
+    return new Date(asUTC - beforeOffset);
   }
 
   // F-82: Zentrale Stelle fuer die tatsaechliche UTC-Instanz von Start/Ende
@@ -1426,7 +1460,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
       const activeStyle = isSelected ? 'border-color: var(--event-primary) !important; box-shadow: 0 0 15px rgba(0, 240, 255, 0.4) !important;' : '';
 
       html += `
-        <div class="quest-item rarity-${rarity.id} ${isSelected ? "active" : ""}" data-id="${escapeHtml(ev.event_id)}" style="cursor: pointer; ${activeStyle}">
+        <div class="quest-item rarity-${rarity.id} ${isSelected ? "active" : ""}" data-id="${escapeHtml(ev.event_id)}" role="button" tabindex="0" style="cursor: pointer; ${activeStyle}">
           <span class="quest-rarity-tag">${rarity.label}</span>
           <div class="quest-title fw-bold ${isCancelled ? "event-cancelled text-decoration-line-through text-muted" : ""}">
             ${escapeHtml(ev.titel)}
@@ -1462,6 +1496,12 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     // Bind event handlers
     const listDiv = container.querySelector(".quest-list-wrapper");
     listDiv.querySelectorAll(".quest-item").forEach(item => {
+      // F-127: Fokusfähige Karten mit Enter und Leertaste aktivieren.
+      item.addEventListener("keydown", (event) => {
+        if (event.target !== item || (event.key !== "Enter" && event.key !== " ")) return;
+        event.preventDefault();
+        item.click();
+      });
       item.addEventListener("click", () => {
         getAudioContext();
         playSelectSound();
@@ -1992,11 +2032,11 @@ function app(configdata = {}, enclosingHtmlDivElement) {
       }
     });
 
-    panel.querySelector(`#${rootId}-btn-export-single`).addEventListener("click", () => {
+    const btnExportSingle = panel.querySelector(`#${rootId}-btn-export-single`);
+    btnExportSingle.addEventListener("click", () => {
       getAudioContext();
       playSelectSound();
-      const icsString = generateICS([ev]);
-      downloadICS(icsString, `quest_${slugify(ev.titel)}.ics`);
+      exportiereICS([ev], `quest_${slugify(ev.titel)}.ics`, btnExportSingle);
     });
   }
 
@@ -2053,17 +2093,28 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     let ics = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//QuestKalender ODAS//DE\r\nCALSCALE:GREGORIAN\r\n";
     
     events.forEach(ev => {
-      const startFormatted = formatICSDate(ev.datum_start);
-      const endFormatted = formatICSDate(ev.datum_ende);
+      // F-134: Einzeltermine als UTC; Wiederholungen und unbekannte Zonen behalten ihre zonierte Ortszeit.
+      const tzid = ev.zeitzone || "Europe/Berlin";
+      const zoned = !!ev.wiederholung || !istBekannteZeitzone(tzid);
+      let startFormatted, endFormatted;
+      try {
+        startFormatted = formatICSDate(ev.datum_start, tzid, zoned);
+        endFormatted = formatICSDate(ev.datum_ende, tzid, zoned);
+      } catch (error) {
+        throw new Error(`${error.message} Termin: „${ev.titel}“.`);
+      }
       const nowFormatted = formatICSDate(new Date().toISOString());
 
       ics += "BEGIN:VEVENT\r\n";
       ics += `UID:${ev.event_id}@odas-questkalender.de\r\n`;
       ics += `DTSTAMP:${nowFormatted}\r\n`;
       
-      const tzid = ev.zeitzone || "Europe/Berlin";
-      ics += `DTSTART;TZID=${tzid}:${startFormatted}\r\n`;
-      ics += `DTEND;TZID=${tzid}:${endFormatted}\r\n`;
+      const dateParameter = value => !value.includes("T") ? ";VALUE=DATE" : value.endsWith("Z") ? "" : ";TZID=" + tzid;
+      ics += `DTSTART${dateParameter(startFormatted)}:${startFormatted}\r\n`;
+      // RFC 5545: DTEND nur, wenn gleicher Werttyp und echt nach DTSTART.
+      if (endFormatted && endFormatted.includes("T") === startFormatted.includes("T") && endFormatted > startFormatted) {
+        ics += `DTEND${dateParameter(endFormatted)}:${endFormatted}\r\n`;
+      }
 
       ics += `SUMMARY:${escapeICSString(ev.titel)}\r\n`;
       
@@ -2092,9 +2143,9 @@ function app(configdata = {}, enclosingHtmlDivElement) {
         ics += `RRULE:${ev.wiederholung}\r\n`;
       }
 
-      if (ev.veranstalter) {
-        const mailto = ev.kontakt_email ? `:mailto:${ev.kontakt_email}` : "";
-        ics += `ORGANIZER;CN=${escapeICSString(ev.veranstalter)}${mailto}\r\n`;
+      if (ev.veranstalter && ev.kontakt_email) {
+        const address = encodeURIComponent(String(ev.kontakt_email).trim()).replace(/%40/g, "@");
+        ics += `ORGANIZER;CN=${escapeICSParameter(ev.veranstalter)}:mailto:${address}\r\n`;
       }
 
       if (ev.status === "abgesagt") {
@@ -2106,7 +2157,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
       if (ev.teilnehmer) {
         const attendees = ev.teilnehmer.split(";").map(t => t.trim()).filter(Boolean);
         attendees.forEach(att => {
-          ics += `ATTENDEE;CN=${escapeICSString(att)};ROLE=REQ-PARTICIPANT:mailto:noreply@odas-questkalender.de\r\n`;
+          ics += `ATTENDEE;CN=${escapeICSParameter(att)};ROLE=REQ-PARTICIPANT:mailto:noreply@odas-questkalender.de\r\n`;
         });
       }
 
@@ -2115,6 +2166,35 @@ function app(configdata = {}, enclosingHtmlDivElement) {
 
     ics += "END:VCALENDAR";
     return ics;
+  }
+
+  function istBekannteZeitzone(tzid) {
+    try {
+      new Intl.DateTimeFormat("en-US", { timeZone: tzid });
+      return true;
+    } catch (_error) {
+      return false;
+    }
+  }
+
+  // F-134: Exportfehler sichtbar in der Instanz statt stillem Abbruch.
+  function exportiereICS(events, filename, button) {
+    const hinweisId = `${button.id}-hinweis`;
+    let hinweis = document.getElementById(hinweisId);
+    try {
+      downloadICS(generateICS(events), filename);
+      if (hinweis) hinweis.remove();
+    } catch (error) {
+      console.error("Kalenderexport fehlgeschlagen:", error);
+      if (!hinweis) {
+        hinweis = document.createElement("div");
+        hinweis.id = hinweisId;
+        hinweis.className = "alert alert-warning small mt-2 mb-0";
+        hinweis.setAttribute("role", "alert");
+        button.insertAdjacentElement("afterend", hinweis);
+      }
+      hinweis.textContent = "Kalenderexport nicht möglich: " + error.message;
+    }
   }
 
   function downloadICS(content, filename) {
@@ -2130,14 +2210,30 @@ function app(configdata = {}, enclosingHtmlDivElement) {
   }
 
   // Helper functions
-  function formatICSDate(dateStr) {
+  function formatICSDate(dateStr, tzid = "Europe/Berlin", zoned = false) {
     if (!dateStr) return "";
-    const clean = dateStr.replace(/[-:]/g, "");
-    const indexDot = clean.indexOf(".");
-    if (indexDot !== -1) {
-      return clean.substring(0, indexDot);
+    const raw = String(dateStr).trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw.replace(/-/g, "");
+    if (zoned && !istBekannteZeitzone(tzid)) {
+      // F-134: Unbekannte Zone (z. B. Outlook „W. Europe Standard Time“) nicht über Intl umrechnen.
+      const ortszeit = /^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})(?::(\d{2}))?$/.exec(raw);
+      if (ortszeit) return ortszeit[1] + ortszeit[2] + ortszeit[3] + "T" + ortszeit[4] + ortszeit[5] + (ortszeit[6] || "00");
+      zoned = false; // expliziter Offset: als UTC-Zeitpunkt schreiben
     }
-    return clean.replace("Z", "");
+    const instant = parseEventDateTime(raw, tzid);
+    if (!instant) throw new Error("Ungültiges Datum beim Kalenderexport.");
+    if (!zoned) return instant.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
+    const values = {};
+    new Intl.DateTimeFormat("en-GB", {
+      timeZone: tzid, hourCycle: "h23", year: "numeric", month: "2-digit",
+      day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit",
+    }).formatToParts(instant).forEach(part => { values[part.type] = part.value; });
+    return values.year + values.month + values.day + "T" + values.hour + values.minute + values.second;
+  }
+
+  function escapeICSParameter(value) {
+    // RFC 6868: CN ist ein Parameterwert, kein TEXT-Feld.
+    return '"' + String(value).replace(/\^/g, "^^").replace(/\r\n|\r|\n/g, "^n").replace(/"/g, "^'") + '"';
   }
 
   function escapeICSString(str) {
