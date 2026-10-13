@@ -1570,7 +1570,9 @@ function app(configdata = {}, enclosingHtmlDivElement) {
       const mapDiv = document.getElementById(`${rootId}-map-canvas`);
       if (!mapDiv || !window.L) return;
 
-      leafletMap = window.L.map(mapDiv).setView(mapCenter, mapZoom);
+      // F-158: Ohne Zoomanimation bleibt kein Leaflet-Zoomende-Timer, der nach
+      // leafletMap.remove() beim schnellen Tabwechsel auf entfernte Panes zugreift.
+      leafletMap = window.L.map(mapDiv, { zoomAnimation: false }).setView(mapCenter, mapZoom);
 
       window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
