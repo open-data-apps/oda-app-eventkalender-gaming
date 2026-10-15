@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.32.15 - 2026-10-15
+- DOCS: Neue Store-Screenshots: je drei Desktop- (1440 × 1000) und Mobile-Aufnahmen (390 × 844) der aktuellen App, aufgenommen auf der Dev-Instanz. Bisherige Bilder nach `docs/screenshots/archive/2026-10-13/` verschoben. Keine Änderung an App-Code oder Konfiguration.
+
 ## 1.32.14 - 2026-10-15
 - FIX: Mobil (bis 575 px): Aktionsknöpfe der Kampagnenansicht (Sound, Export, Refresh) brechen innerhalb der App um, und die Menüspalte der Kopfzeile ragt nicht mehr über den Bildschirmrand.
 
