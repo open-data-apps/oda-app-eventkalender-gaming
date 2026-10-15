@@ -800,3 +800,14 @@ footer p,
 .qk-kpi-info-toggle:hover, .qk-kpi-info-toggle:focus-visible, .qk-kpi-info-toggle:not(.collapsed) { color: var(--event-primary); background: rgba(0, 240, 255, 0.12); outline: none; text-shadow: 0 0 8px rgba(0, 240, 255, 0.4); }
 .qk-kpi-info-icon { font-size: 1rem; line-height: 1; }
 .qk-kpi-kontext { margin-top: 0.5rem; color: var(--event-text-muted); font-size: 0.875rem; line-height: 1.4; }
+/* Mobile: allow the event action buttons to wrap within the app content. */
+@media (max-width: 575.98px) {
+  #main-content .event-container .header-actions {
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+
+  header #header .col-1.text-end {
+    width: auto;
+  }
+}

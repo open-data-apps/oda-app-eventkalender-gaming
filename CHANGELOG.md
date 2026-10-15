@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.32.14 - 2026-10-15
+- FIX: Mobil (bis 575 px): Aktionsknöpfe der Kampagnenansicht (Sound, Export, Refresh) brechen innerhalb der App um, und die Menüspalte der Kopfzeile ragt nicht mehr über den Bildschirmrand.
+
 ## 1.32.13 - 2026-10-13
 - FIX: Standard-Fehleranzeige gibt präzisere Tipps: ein „Failed to fetch“ ohne Proxy-Kontext erhält einen Netzwerk-Hinweis statt `proxyAktiv`; der 404-Hinweis gilt nur noch für echte HTTP-404-Antworten und nennt den lokal fehlenden Proxy/Relay statt pauschal „Datensatz auf dem Portal nicht gefunden“.
 
