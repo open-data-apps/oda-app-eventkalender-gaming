@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.32.17 - 2026-10-15
+- FIX: Beispieldatensatz `assets/events.csv` (und die Kalenderfassung `assets/events.ics`) aktualisiert: 20 fiktive Quests von August 2026 bis Dezember 2027, vergangene als „abgeschlossen“, mehrere in den nächsten Tagen – „Active Quest“ und „Weekly Quests“ zeigen wieder Termine. Keine Änderung an App-Code oder Konfiguration.
+
 ## 1.32.16 - 2026-10-15
 - FIX: Countdown „Active Quest“ rundet Tage auf (7 Tage 3 Stunden vor Start: „8 days“) und widerspricht dem Zähler „Weekly Quests“ nicht mehr; „Weekly Quests“ zählt abgesagte Quests wie „Active Quest“ nicht mit.
 - FIX: Mobil (bis 576 px): Das Seltenheits-Label steht über dem Titel statt über ihm zu liegen; lange Quest-Titel laufen nicht mehr unter das Label.
