@@ -814,8 +814,4 @@ footer p,
     min-width: 0;
     flex-wrap: wrap;
   }
-
-  header #header .col-1.text-end {
-    width: auto;
-  }
 }
