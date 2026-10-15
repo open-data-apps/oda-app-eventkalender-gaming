@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.32.16 - 2026-10-15
+- FIX: Countdown „Active Quest“ rundet Tage auf (7 Tage 3 Stunden vor Start: „8 days“) und widerspricht dem Zähler „Weekly Quests“ nicht mehr; „Weekly Quests“ zählt abgesagte Quests wie „Active Quest“ nicht mit.
+- FIX: Mobil (bis 576 px): Das Seltenheits-Label steht über dem Titel statt über ihm zu liegen; lange Quest-Titel laufen nicht mehr unter das Label.
+
 ## 1.32.15 - 2026-10-15
 - DOCS: Neue Store-Screenshots: je drei Desktop- (1440 × 1000) und Mobile-Aufnahmen (390 × 844) der aktuellen App, aufgenommen auf der Dev-Instanz. Bisherige Bilder nach `docs/screenshots/archive/2026-10-13/` verschoben. Keine Änderung an App-Code oder Konfiguration.
 
