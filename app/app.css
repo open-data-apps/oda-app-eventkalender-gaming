@@ -405,6 +405,14 @@ h1, h2, h3, h4, h5, h6, .app-title {
   border: 1px solid transparent;
 }
 
+@media (max-width: 576px) {
+  .quest-rarity-tag {
+    position: static;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+}
+
 .rarity-common .quest-rarity-tag { color: var(--rarity-common); border-color: rgba(78, 82, 100, 0.4); }
 .rarity-rare .quest-rarity-tag { color: var(--rarity-rare); border-color: rgba(0, 136, 255, 0.4); text-shadow: 0 0 5px rgba(0, 136, 255, 0.3); }
 .rarity-epic .quest-rarity-tag { color: var(--rarity-epic); border-color: rgba(188, 19, 254, 0.4); text-shadow: 0 0 8px rgba(188, 19, 254, 0.5); }

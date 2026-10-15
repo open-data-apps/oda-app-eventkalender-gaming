@@ -1331,7 +1331,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
 
       const diffMs = getEventStartInstant(nextEv) - now;
       const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
-      const diffDays = Math.floor(diffHrs / 24);
+      const diffDays = Math.ceil(diffMs / 86400000);
 
       if (diffHrs < 1) {
         countdownStr = "Starting in < 1 hr";
@@ -1346,7 +1346,7 @@ function app(configdata = {}, enclosingHtmlDivElement) {
     const sevenDaysLater = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
     const eventsThisWeek = allEvents.filter(e => {
       const d = getEventStartInstant(e);
-      return d && d >= now && d <= sevenDaysLater;
+      return d && d >= now && d <= sevenDaysLater && e.status !== "abgesagt";
     });
 
     // 4. Unique Categories count
