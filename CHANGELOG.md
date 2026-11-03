@@ -2,6 +2,7 @@
 
 ## 1.32.20 - 2026-11-03
 - DOCS: MIT-Lizenz ergänzt: `LICENSE` liegt im Repository und im Lieferpaket (`make zip`), das README hat einen Abschnitt „Lizenz“. Keine Änderung an App-Code oder Konfiguration.
+- DOCS: Alte Store-Screenshots unter `docs/screenshots/archive/2026-10-13/` entfernt; sie bleiben über den Git-Tag `archive/screenshots-2026-10-13` abrufbar.
 
 ## 1.32.19 - 2026-10-15
 - FIX: Nicht mehr benötigte Kopfzeilen-Regeln aus der App-CSS entfernt (Kopfzeile unverändert).
